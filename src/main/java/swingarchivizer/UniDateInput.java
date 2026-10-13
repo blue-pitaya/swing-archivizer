@@ -11,6 +11,8 @@ public final class UniDateInput extends JPanel {
     private final UniTextInput input;
 
     public UniDateInput(String labelText) {
+        super(new BorderLayout());
+
         input = new UniTextInput(labelText);
         input.setPlaceholder("YYYY-MM-DD");
         add(input, BorderLayout.CENTER);
@@ -19,10 +21,10 @@ public final class UniDateInput extends JPanel {
     public Optional<LocalDate> getValue() {
         try {
             LocalDate date = LocalDate.parse(input.getText());
-            input.setValidationMessage("");
+            input.clearValidationMessage();
             return Optional.of(date);
         } catch (DateTimeParseException e) {
-            input.setValidationMessage("Nieprawidłowa data (YYYY-MM-DD)");
+            input.setValidationMessage("Nieprawidłowa data");
             return Optional.empty();
         }
     }

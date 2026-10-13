@@ -9,6 +9,7 @@ public class App {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Archivizer v1.0");
+
             JPanel form = new JPanel(new GridBagLayout());
 
             UniDateInput dateFromInput = new UniDateInput("Data początkowa");
@@ -43,8 +44,9 @@ public class App {
             c3.anchor = GridBagConstraints.LINE_START;
             form.add(confirmButton, c3);
 
-            frame.add(form, BorderLayout.CENTER);
+            frame.add(form, BorderLayout.NORTH);
 
+            frame.setMinimumSize(new Dimension(100, 200));
             frame.pack();
 
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
