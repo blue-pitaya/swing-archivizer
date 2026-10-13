@@ -2,6 +2,7 @@ package swingarchivizer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -23,6 +24,12 @@ public class App {
                     return;
                 }
                 System.out.println(from.get() + " - " + to.get());
+
+                HttpService hs = new HttpService();
+                try {
+                    hs.run(from.get(), to.get());
+                } catch (IOException ex) {
+                }
             });
 
             GridBagConstraints c1 = new GridBagConstraints();
