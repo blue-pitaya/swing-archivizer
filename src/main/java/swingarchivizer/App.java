@@ -46,6 +46,9 @@ public class App {
 
             frame.add(form, BorderLayout.NORTH);
 
+            ItemsTable itemsTable = new ItemsTable();
+            frame.add(itemsTable.getPane(), BorderLayout.CENTER);
+
             frame.setMinimumSize(new Dimension(100, 200));
             frame.pack();
 
