@@ -1,0 +1,29 @@
+package swingarchivizer;
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Optional;
+
+public final class UniDateInput extends JPanel {
+    private final UniTextInput input;
+
+    public UniDateInput(String labelText) {
+        input = new UniTextInput(labelText);
+        input.setPlaceholder("YYYY-MM-DD");
+        add(input, BorderLayout.CENTER);
+    }
+
+    public Optional<LocalDate> getValue() {
+        try {
+            LocalDate date = LocalDate.parse(input.getText());
+            input.setValidationMessage("");
+            return Optional.of(date);
+        } catch (DateTimeParseException e) {
+            input.setValidationMessage("Nieprawidłowa data (YYYY-MM-DD)");
+            return Optional.empty();
+        }
+    }
+}
