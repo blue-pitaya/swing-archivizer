@@ -36,6 +36,10 @@ public final class UniDirectoryInput extends JPanel {
         browseButton.setEnabled(enabled);
     }
 
+    public void setPath(Path path) {
+        input.setText(path.toString());
+    }
+
     public Optional<Path> getValue() {
         Optional<Path> path = toDirectory(input.getText());
         if (path.isPresent()) {

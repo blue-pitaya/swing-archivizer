@@ -30,15 +30,19 @@ public final class FirstForm {
         dateToInput.getInput().setText("2026-01-31");
         confirmButton.addActionListener(this::confirm);
 
-        ctx.getUiBusy().subscribeAndCall(uiBusy -> {
-            dateFormInput.setEnabled(!uiBusy);
-            dateToInput.setEnabled(!uiBusy);
-            confirmButton.setEnabled(!uiBusy);
-        });
+        ctx.getUiBusy().subscribeAndCall(uiBusy -> updateForm());
+        ctx.getFetchState().subscribeAndCall(fetchState -> updateForm());
 
         form.add(dateFormInput, getConstraints(0, 0));
         form.add(dateToInput, getConstraints(1, 0));
         form.add(confirmButton, getConstraints(0, 1));
+    }
+
+    private void updateForm() {
+        boolean enabled = !ctx.getUiBusy().getValue() && ctx.getFetchState().getValue() != FetchState.RUNNING;
+        dateFormInput.setEnabled(enabled);
+        dateToInput.setEnabled(enabled);
+        confirmButton.setEnabled(enabled);
     }
 
     public JPanel getComponent() {
