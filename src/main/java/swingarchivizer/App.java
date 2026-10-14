@@ -14,8 +14,8 @@ public class App {
             FirstForm firstForm = new FirstForm(ctx, er);
             frame.add(firstForm.getComponent(), BorderLayout.NORTH);
 
-            ItemsTable itemsTable = new ItemsTable();
-            frame.add(itemsTable.getComponent(), BorderLayout.CENTER);
+            DownloadComponent downloadComponent = new DownloadComponent(ctx, er);
+            frame.add(downloadComponent.getComponent(), BorderLayout.CENTER);
 
             frame.setMinimumSize(new Dimension(100, 200));
             frame.pack();

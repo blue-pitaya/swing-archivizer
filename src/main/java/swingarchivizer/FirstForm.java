@@ -1,10 +1,14 @@
 package swingarchivizer;
 
+import swingarchivizer.dto.Item;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public final class FirstForm {
@@ -44,7 +48,8 @@ public final class FirstForm {
 
         HttpService hs = new HttpService();
         try {
-            ctx.setItems(hs.postItemsIds(from.get(), to.get()));
+            List<Item> items = Arrays.asList(hs.postItemsIds(from.get(), to.get())); 
+            ctx.getItems().setValue(items);
         } catch (IOException e) {
             errorReporter.report(e);
         }
