@@ -15,6 +15,7 @@ public final class DownloadComponent {
     private final JPanel container = new JPanel(new GridBagLayout());
     private final DefaultTableModel tableModel = getTableModel();
     private final JTable table = getTable(tableModel);
+    private final UniDirectoryInput directoryInput = new UniDirectoryInput("Katalog docelowy");
     private final JButton startButton = new JButton("Rozpocznij");
     private final JButton stopButton = new JButton("Zatrzymaj");
 
@@ -28,10 +29,12 @@ public final class DownloadComponent {
         tableGridBagConstraints.weighty = 1;
         container.add(new JScrollPane(table), tableGridBagConstraints);
 
+        container.add(directoryInput, getConstraints(1));
+
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.add(startButton);
         buttonsPanel.add(stopButton);
-        container.add(buttonsPanel, getConstraints(1));
+        container.add(buttonsPanel, getConstraints(2));
 
         ctx.getItems().subscribeAndCall(items -> SwingUtilities.invokeLater(() -> {
             tableModel.setRowCount(0);
@@ -42,9 +45,17 @@ public final class DownloadComponent {
         }));
         ctx.getUiBusy().subscribeAndCall(uiBusy -> {
             table.setEnabled(!uiBusy);
+            updateDirectoryInput();
             updateButtons();
         });
-        ctx.getFetchState().subscribeAndCall(fetchState -> updateButtons());
+        ctx.getFetchState().subscribeAndCall(fetchState -> {
+            updateDirectoryInput();
+            updateButtons();
+        });
+    }
+
+    private void updateDirectoryInput() {
+        directoryInput.setEnabled(!ctx.getUiBusy().getValue() && ctx.getFetchState().getValue() != FetchState.RUNNING);
     }
 
     private void updateButtons() {
