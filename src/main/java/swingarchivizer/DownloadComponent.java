@@ -38,12 +38,19 @@ public final class DownloadComponent {
             for (Item item : items) {
                 tableModel.addRow(new Object[]{item.id, item.code, item.date, "W kolejce"});
             }
+            updateButtons();
         }));
         ctx.getUiBusy().subscribeAndCall(uiBusy -> {
             table.setEnabled(!uiBusy);
-            startButton.setEnabled(!uiBusy);
-            stopButton.setEnabled(!uiBusy);
+            updateButtons();
         });
+        ctx.getFetchState().subscribeAndCall(fetchState -> updateButtons());
+    }
+
+    private void updateButtons() {
+        boolean enabled = !ctx.getUiBusy().getValue() && !ctx.getItems().getValue().isEmpty();
+        startButton.setEnabled(enabled);
+        stopButton.setEnabled(enabled && ctx.getFetchState().getValue() != FetchState.NEW);
     }
 
     public JPanel getComponent() {

@@ -71,7 +71,14 @@ class Handler(BaseHTTPRequestHandler):
         if date_from > date_to:
             self.send_json(422, {"error": '"from" is after "to"'})
             return
-        self.send_json(200, ROWS)
+        self.send_json(
+            200,
+            [
+                row
+                for row in ROWS
+                if date_from <= date.fromisoformat(row["date"]) <= date_to
+            ],
+        )
 
     def handle_download(self, item_id):
         if not item_id.isdigit() or int(item_id) not in IDS:

@@ -26,8 +26,8 @@ public final class FirstForm {
         this.errorReporter = errorReporter;
         this.ctx = ctx;
 
-        dateFormInput.getInput().setText("2021-01-01");
-        dateToInput.getInput().setText("2021-01-31");
+        dateFormInput.getInput().setText("2026-01-01");
+        dateToInput.getInput().setText("2026-01-31");
         confirmButton.addActionListener(this::confirm);
 
         ctx.getUiBusy().subscribeAndCall(uiBusy -> {
