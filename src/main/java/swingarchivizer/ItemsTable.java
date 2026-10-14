@@ -20,7 +20,7 @@ public final class ItemsTable {
         pane = new JScrollPane(table);
     }
 
-    public JScrollPane getPane() {
+    public JScrollPane getComponent() {
         return pane;
     }
 }

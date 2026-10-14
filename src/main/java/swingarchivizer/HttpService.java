@@ -2,6 +2,7 @@ package swingarchivizer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
+import swingarchivizer.dto.Item;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -16,9 +17,9 @@ public final class HttpService {
     public HttpService() {
     }
 
-    public void run(LocalDate from, LocalDate to) throws IOException {
+    public Item[] postItemsIds(LocalDate from, LocalDate to) throws IOException {
         Request request = new Request.Builder()
-                .url("http://127.0.0.1:8069/items/ids")
+                .url("http://127.0.0.1:8069/items")
                 .post(RequestBody.create(mapper.writeValueAsString(new ItemIdsRequest(from, to)), JSON))
                 .build();
         try (Response response = client.newCall(request).execute()) {
@@ -26,10 +27,8 @@ public final class HttpService {
             if (!response.isSuccessful()) {
                 throw new IOException("HTTP " + response.code() + ": " + body);
             }
-            int[] ids = mapper.readValue(body, int[].class);
-            for (int i : ids) {
-                System.out.println(i);
-            }
+
+            return mapper.readValue(body, Item[].class);
         }
     }
 }

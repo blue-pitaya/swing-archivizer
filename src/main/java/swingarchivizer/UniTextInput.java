@@ -78,6 +78,10 @@ public final class UniTextInput extends JPanel {
         field.setBorder(defaultBorder);
     }
 
+    public void setText(String v) {
+        field.setText(v);
+    }
+
     public String getText() {
         return field.getText();
     }

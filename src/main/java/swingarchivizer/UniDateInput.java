@@ -27,4 +27,8 @@ public final class UniDateInput extends JPanel {
             return Optional.empty();
         }
     }
+
+    public UniTextInput getInput() {
+        return input;
+    }
 }
