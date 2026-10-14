@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 public final class FirstForm {
 
@@ -27,8 +28,13 @@ public final class FirstForm {
 
         dateFormInput.getInput().setText("2021-01-01");
         dateToInput.getInput().setText("2021-01-31");
-
         confirmButton.addActionListener(this::confirm);
+
+        ctx.getUiBusy().subscribe(uiBusy -> {
+            dateFormInput.setEnabled(!uiBusy);
+            dateToInput.setEnabled(!uiBusy);
+            confirmButton.setEnabled(!uiBusy);
+        });
 
         form.add(dateFormInput, getConstraints(0, 0));
         form.add(dateToInput, getConstraints(1, 0));
@@ -46,13 +52,24 @@ public final class FirstForm {
             return;
         }
 
-        HttpService hs = new HttpService();
-        try {
-            List<Item> items = Arrays.asList(hs.postItemsIds(from.get(), to.get())); 
-            ctx.getItems().setValue(items);
-        } catch (IOException e) {
-            errorReporter.report(e);
-        }
+        ctx.getUiBusy().setValue(true);
+        new SwingWorker<List<Item>, Void>() {
+            @Override
+            protected List<Item> doInBackground() throws IOException {
+                return Arrays.asList(new HttpService().postItemsIds(from.get(), to.get()));
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    ctx.getItems().setValue(get());
+                } catch (InterruptedException | ExecutionException e) {
+                    errorReporter.report(e);
+                } finally {
+                    ctx.getUiBusy().setValue(false);
+                }
+            }
+        }.execute();
     }
 
     private GridBagConstraints getConstraints(int x, int y) {

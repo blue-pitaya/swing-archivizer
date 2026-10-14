@@ -3,6 +3,7 @@ package swingarchivizer;
 import swingarchivizer.dto.Item;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
@@ -28,6 +29,14 @@ public final class DownloadComponent {
 
         table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(400, 200));
+        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setEnabled(table.isEnabled());
+                return c;
+            }
+        });
 
         pane = new JScrollPane(table);
 
@@ -37,6 +46,9 @@ public final class DownloadComponent {
                 model.addRow(new Object[]{item.id, item.code, item.date, "W kolejce"});
             }
         }));
+        ctx.getUiBusy().subscribe(uiBusy -> {
+            table.setEnabled(!uiBusy);
+        });
     }
 
     public JScrollPane getComponent() {

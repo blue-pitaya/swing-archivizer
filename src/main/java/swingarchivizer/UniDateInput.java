@@ -17,6 +17,12 @@ public final class UniDateInput extends JPanel {
         add(input, BorderLayout.CENTER);
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        input.setEnabled(enabled);
+    }
+
     public Optional<LocalDate> getValue() {
         try {
             LocalDate date = LocalDate.parse(input.getText());

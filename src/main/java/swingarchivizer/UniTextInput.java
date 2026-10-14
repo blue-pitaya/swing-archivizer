@@ -61,6 +61,13 @@ public final class UniTextInput extends JPanel {
         add(validationMessage, c);
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        label.setEnabled(enabled);
+        field.setEnabled(enabled);
+    }
+
     public void setPlaceholder(String v) {
         placeholder = v;
     }
