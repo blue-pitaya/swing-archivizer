@@ -72,7 +72,7 @@ public final class FirstForm {
         }.execute();
     }
 
-    private GridBagConstraints getConstraints(int x, int y) {
+    private static GridBagConstraints getConstraints(int x, int y) {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = x;
         c.gridy = y;
