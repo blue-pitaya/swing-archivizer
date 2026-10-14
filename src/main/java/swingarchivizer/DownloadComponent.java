@@ -33,13 +33,13 @@ public final class DownloadComponent {
         buttonsPanel.add(stopButton);
         container.add(buttonsPanel, getConstraints(1));
 
-        ctx.getItems().subscribe(items -> SwingUtilities.invokeLater(() -> {
+        ctx.getItems().subscribeAndCall(items -> SwingUtilities.invokeLater(() -> {
             tableModel.setRowCount(0);
             for (Item item : items) {
                 tableModel.addRow(new Object[]{item.id, item.code, item.date, "W kolejce"});
             }
         }));
-        ctx.getUiBusy().subscribe(uiBusy -> {
+        ctx.getUiBusy().subscribeAndCall(uiBusy -> {
             table.setEnabled(!uiBusy);
             startButton.setEnabled(!uiBusy);
             stopButton.setEnabled(!uiBusy);

@@ -30,7 +30,7 @@ public final class FirstForm {
         dateToInput.getInput().setText("2021-01-31");
         confirmButton.addActionListener(this::confirm);
 
-        ctx.getUiBusy().subscribe(uiBusy -> {
+        ctx.getUiBusy().subscribeAndCall(uiBusy -> {
             dateFormInput.setEnabled(!uiBusy);
             dateToInput.setEnabled(!uiBusy);
             confirmButton.setEnabled(!uiBusy);

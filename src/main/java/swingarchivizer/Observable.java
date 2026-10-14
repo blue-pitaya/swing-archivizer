@@ -16,6 +16,11 @@ public final class Observable<T> {
         listeners.add(listener);
     }
 
+    public void subscribeAndCall(Consumer<T> listener) {
+        listeners.add(listener);
+        listener.accept(value);
+    }
+
     public void unsubscribe(Consumer<T> listener) {
         listeners.remove(listener);
     }
