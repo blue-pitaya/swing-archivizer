@@ -1,12 +1,14 @@
 """This code is for testing only"""
 
 import json
+import time
 from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 HOST = "127.0.0.1"
 PORT = 8069
+DELAY_SECONDS = 1.5
 ROWS = [
     {"id": 1, "code": "QWHZK", "date": "2026-01-02"},
     {"id": 2, "code": "LMBTA", "date": "2026-01-04"},
@@ -45,6 +47,7 @@ FILE_PATH = Path(__file__).resolve().parent / "Shrek.png"
 
 class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
+        time.sleep(DELAY_SECONDS)
         if self.path == "/items":
             self.handle_ids()
         elif self.path.startswith("/items/"):
