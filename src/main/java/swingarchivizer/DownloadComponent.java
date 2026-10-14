@@ -6,6 +6,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.nio.file.Path;
+import java.util.Optional;
 
 public final class DownloadComponent {
 
@@ -31,6 +34,8 @@ public final class DownloadComponent {
 
         container.add(directoryInput, getConstraints(1));
 
+        startButton.addActionListener(this::start);
+
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.add(startButton);
         buttonsPanel.add(stopButton);
@@ -52,6 +57,32 @@ public final class DownloadComponent {
             updateDirectoryInput();
             updateButtons();
         });
+    }
+
+    private void start(ActionEvent event) {
+        Optional<Path> path = directoryInput.getValue();
+        if (!path.isPresent()) {
+            return;
+        }
+
+        //ctx.getUiBusy().setValue(true);
+        //new SwingWorker<List<Item>, Void>() {
+        //    @Override
+        //    protected List<Item> doInBackground() throws IOException {
+        //        return Arrays.asList(new HttpService().postItemsIds(from.get(), to.get()));
+        //    }
+
+        //    @Override
+        //    protected void done() {
+        //        try {
+        //            ctx.getItems().setValue(get());
+        //        } catch (InterruptedException | ExecutionException e) {
+        //            errorReporter.report(e);
+        //        } finally {
+        //            ctx.getUiBusy().setValue(false);
+        //        }
+        //    }
+        //}.execute();
     }
 
     private void updateDirectoryInput() {

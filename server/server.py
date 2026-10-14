@@ -8,7 +8,7 @@ from pathlib import Path
 
 HOST = "127.0.0.1"
 PORT = 8069
-DELAY_SECONDS = 1.5
+DELAY_SECONDS = 0.5
 ROWS = [
     {"id": 1, "code": "QWHZK", "date": "2026-01-02"},
     {"id": 2, "code": "LMBTA", "date": "2026-01-04"},

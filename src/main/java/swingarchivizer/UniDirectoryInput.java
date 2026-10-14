@@ -3,6 +3,11 @@ package swingarchivizer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 public final class UniDirectoryInput extends JPanel {
     private final UniTextInput input;
@@ -29,6 +34,30 @@ public final class UniDirectoryInput extends JPanel {
         super.setEnabled(enabled);
         input.setEnabled(enabled);
         browseButton.setEnabled(enabled);
+    }
+
+    public Optional<Path> getValue() {
+        Optional<Path> path = toDirectory(input.getText());
+        if (path.isPresent()) {
+            input.clearValidationMessage();
+        } else {
+            input.setValidationMessage("Nieprawidłowy katalog");
+        }
+
+        return path;
+    }
+
+    private static Optional<Path> toDirectory(String text) {
+        if (text.isEmpty()) {
+            return Optional.empty();
+        }
+
+        try {
+            Path path = Paths.get(text);
+            return Files.isDirectory(path) ? Optional.of(path) : Optional.empty();
+        } catch (InvalidPathException e) {
+            return Optional.empty();
+        }
     }
 
     private void browse(ActionEvent event) {
