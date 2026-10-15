@@ -91,7 +91,7 @@ public final class DownloadComponent {
             return;
         }
 
-        new DownloadItemWorker(items.next(), httpService, downloadDir, () -> downloadNext(items, downloadDir)).execute();
+        new DownloadItemWorker(items.next(), errorReporter, httpService, downloadDir, () -> downloadNext(items, downloadDir)).execute();
     }
 
     private void updateDirectoryInput() {

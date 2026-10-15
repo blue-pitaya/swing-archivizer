@@ -42,6 +42,7 @@ ROWS = [
     {"id": 30, "code": "VNBZG", "date": "2026-03-20"},
 ]
 IDS = [row["id"] for row in ROWS]
+FAILING_ID = 3
 FILE_PATH = Path(__file__).resolve().parent / "Shrek.png"
 
 
@@ -90,6 +91,9 @@ class Handler(BaseHTTPRequestHandler):
     def handle_download(self, item_id):
         if not item_id.isdigit() or int(item_id) not in IDS:
             self.send_json(404, {"error": f"Unknown item {item_id}"})
+            return
+        if int(item_id) == FAILING_ID:
+            self.send_json(500, {"error": f"Simulated failure for item {item_id}"})
             return
         if not FILE_PATH.is_file():
             self.send_json(500, {"error": f"Missing file {FILE_PATH.name}"})
