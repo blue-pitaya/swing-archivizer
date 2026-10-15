@@ -3,7 +3,8 @@ package swingarchivizer.context;
 public enum FetchState {
     NEW("Gotowy"),
     RUNNING("Pobieranie w trakcie..."),
-    STOPPED("Zatrzymano pobieranie");
+    STOPPED("Zatrzymano pobieranie"),
+    FINISHED("Zakończono");
 
     private final String label;
 

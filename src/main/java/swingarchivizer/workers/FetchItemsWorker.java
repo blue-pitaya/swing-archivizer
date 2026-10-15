@@ -4,6 +4,7 @@ import swingarchivizer.MessageDialogHelper;
 import swingarchivizer.HttpService;
 import swingarchivizer.context.AppContext;
 import swingarchivizer.context.FetchItem;
+import swingarchivizer.context.FetchState;
 import swingarchivizer.dto.Item;
 
 import javax.swing.*;
@@ -50,6 +51,7 @@ public final class FetchItemsWorker extends SwingWorker<List<Item>, Void> {
                     .map(FetchItem::new)
                     .collect(Collectors.toList());
             ctx.getItems().setValue(items);
+            ctx.getFetchState().setValue(FetchState.NEW);
         } catch (InterruptedException | ExecutionException e) {
             messageDialogHelper.report(e);
         } finally {

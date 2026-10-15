@@ -84,6 +84,7 @@ public final class DownloadComponent {
 
     private void downloadNext(Iterator<FetchItem> items, Path downloadDir) {
         if (!items.hasNext()) {
+            ctx.getFetchState().setValue(FetchState.FINISHED);
             messageDialogHelper.success("Zakończono pobieranie");
             return;
         }
@@ -108,11 +109,13 @@ public final class DownloadComponent {
         if (ctx.getUiBusy().getValue()) {
             startButton.setEnabled(false);
             stopButton.setEnabled(false);
+            return;
         }
 
         boolean anyItems = !ctx.getItems().getValue().isEmpty();
-        startButton.setEnabled(anyItems && ctx.getFetchState().getValue() != FetchState.RUNNING);
-        stopButton.setEnabled(anyItems && ctx.getFetchState().getValue() != FetchState.NEW);
+        boolean finished = ctx.getFetchState().getValue() == FetchState.FINISHED;
+        startButton.setEnabled(anyItems && !finished && ctx.getFetchState().getValue() != FetchState.RUNNING);
+        stopButton.setEnabled(anyItems && !finished && ctx.getFetchState().getValue() != FetchState.NEW);
     }
 
     public JPanel getComponent() {
