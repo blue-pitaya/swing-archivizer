@@ -1,28 +1,18 @@
 package swingarchivizer.views;
 
-import swingarchivizer.MessageDialogHelper;
-import swingarchivizer.HttpService;
 import swingarchivizer.components.UniDirectoryInput;
-import swingarchivizer.context.AppContext;
 import swingarchivizer.context.FetchItem;
-import swingarchivizer.context.FetchState;
-import swingarchivizer.workers.DownloadItemWorker;
+import swingarchivizer.presenters.DownloadPresenter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public final class DownloadPanel {
-
-    private final AppContext ctx;
-    private final MessageDialogHelper messageDialogHelper;
-    private final HttpService httpService;
+public final class DownloadPanel implements DownloadPresenter.View {
 
     private final JPanel container = new JPanel(new GridBagLayout());
     private final FetchItemsTableModel tableModel = new FetchItemsTableModel();
@@ -32,11 +22,7 @@ public final class DownloadPanel {
     private final JButton startButton = new JButton("Rozpocznij");
     private final JButton stopButton = new JButton("Zatrzymaj");
 
-    public DownloadPanel(AppContext ctx, MessageDialogHelper messageDialogHelper, HttpService httpService) {
-        this.messageDialogHelper = messageDialogHelper;
-        this.ctx = ctx;
-        this.httpService = httpService;
-
+    public DownloadPanel() {
         GridBagConstraints tableGridBagConstraints = getConstraints(0);
         tableGridBagConstraints.fill = GridBagConstraints.BOTH;
         tableGridBagConstraints.weightx = 1;
@@ -46,77 +32,52 @@ public final class DownloadPanel {
         directoryInput.setPath(Paths.get(System.getProperty("user.dir"), "download"));
         container.add(directoryInput, getConstraints(1));
 
-        startButton.addActionListener(this::start);
-
         container.add(statusLabel, getConstraints(2));
 
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.add(startButton);
         buttonsPanel.add(stopButton);
         container.add(buttonsPanel, getConstraints(3));
-
-        ctx.getItems().subscribeAndCall(items -> SwingUtilities.invokeLater(() -> {
-            tableModel.setItems(items);
-            updateButtons();
-        }));
-        ctx.getUiBusy().subscribeAndCall(uiBusy -> {
-            table.setEnabled(!uiBusy);
-            updateDirectoryInput();
-            updateButtons();
-        });
-        ctx.getFetchState().subscribeAndCall(fetchState -> {
-            statusLabel.setText(fetchState.toString());
-            updateDirectoryInput();
-            updateButtons();
-        });
     }
 
-    private void start(ActionEvent event) {
-        Optional<Path> path = directoryInput.getValue();
-        if (!path.isPresent()) {
-            return;
-        }
-
-        ctx.getFetchState().setValue(FetchState.RUNNING);
-        Path downloadDir = path.get();
-        List<FetchItem> items = ctx.getItems().getValue();
-        downloadNext(items.iterator(), downloadDir);
+    @Override
+    public void addStartListener(Runnable listener) {
+        startButton.addActionListener(event -> listener.run());
     }
 
-    private void downloadNext(Iterator<FetchItem> items, Path downloadDir) {
-        if (!items.hasNext()) {
-            ctx.getFetchState().setValue(FetchState.FINISHED);
-            messageDialogHelper.success("Zakończono pobieranie");
-            return;
-        }
-
-        FetchItem item = items.next();
-        item.status.setValue(FetchItem.Status.DOWNLOADING);
-        DownloadItemWorker worker = new DownloadItemWorker(
-                item,
-                messageDialogHelper,
-                httpService,
-                downloadDir,
-                () -> downloadNext(items, downloadDir)
-        );
-        worker.execute();
+    @Override
+    public Optional<Path> getDownloadDir() {
+        return directoryInput.getValue();
     }
 
-    private void updateDirectoryInput() {
-        directoryInput.setEnabled(!ctx.getUiBusy().getValue() && ctx.getFetchState().getValue() != FetchState.RUNNING);
+    @Override
+    public void setItems(List<FetchItem> items) {
+        tableModel.setItems(items);
     }
 
-    private void updateButtons() {
-        if (ctx.getUiBusy().getValue()) {
-            startButton.setEnabled(false);
-            stopButton.setEnabled(false);
-            return;
-        }
+    @Override
+    public void setTableEnabled(boolean enabled) {
+        table.setEnabled(enabled);
+    }
 
-        boolean anyItems = !ctx.getItems().getValue().isEmpty();
-        boolean finished = ctx.getFetchState().getValue() == FetchState.FINISHED;
-        startButton.setEnabled(anyItems && !finished && ctx.getFetchState().getValue() != FetchState.RUNNING);
-        stopButton.setEnabled(anyItems && !finished && ctx.getFetchState().getValue() != FetchState.NEW);
+    @Override
+    public void setDirectoryEnabled(boolean enabled) {
+        directoryInput.setEnabled(enabled);
+    }
+
+    @Override
+    public void setStartEnabled(boolean enabled) {
+        startButton.setEnabled(enabled);
+    }
+
+    @Override
+    public void setStopEnabled(boolean enabled) {
+        stopButton.setEnabled(enabled);
+    }
+
+    @Override
+    public void setStatusText(String text) {
+        statusLabel.setText(text);
     }
 
     public JPanel getComponent() {
