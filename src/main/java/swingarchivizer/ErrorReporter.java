@@ -12,4 +12,8 @@ public final class ErrorReporter {
     public void report(Exception e) {
         JOptionPane.showMessageDialog(frame, e, "Błąd", JOptionPane.ERROR_MESSAGE);
     }
+
+    public void success(String message) {
+        JOptionPane.showMessageDialog(frame, message, "Komunikat", JOptionPane.INFORMATION_MESSAGE);
+    }
 }

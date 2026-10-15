@@ -9,7 +9,6 @@ import swingarchivizer.workers.DownloadItemWorker;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.nio.file.Path;
@@ -25,7 +24,7 @@ public final class DownloadComponent {
     private final HttpService httpService;
 
     private final JPanel container = new JPanel(new GridBagLayout());
-    private final DefaultTableModel tableModel = getTableModel();
+    private final FetchItemsTableModel tableModel = new FetchItemsTableModel();
     private final JTable table = getTable(tableModel);
     private final UniDirectoryInput directoryInput = new UniDirectoryInput("Katalog docelowy");
     private final JLabel statusLabel = new JLabel();
@@ -56,10 +55,7 @@ public final class DownloadComponent {
         container.add(buttonsPanel, getConstraints(3));
 
         ctx.getItems().subscribeAndCall(items -> SwingUtilities.invokeLater(() -> {
-            tableModel.setRowCount(0);
-            for (FetchItem item : items) {
-                tableModel.addRow(new Object[]{item.value.id, item.value.code, item.value.date, item.status.label});
-            }
+            tableModel.setItems(items);
             updateButtons();
         }));
         ctx.getUiBusy().subscribeAndCall(uiBusy -> {
@@ -88,10 +84,20 @@ public final class DownloadComponent {
 
     private void downloadNext(Iterator<FetchItem> items, Path downloadDir) {
         if (!items.hasNext()) {
+            errorReporter.success("Zakończono pobieranie");
             return;
         }
 
-        new DownloadItemWorker(items.next(), errorReporter, httpService, downloadDir, () -> downloadNext(items, downloadDir)).execute();
+        FetchItem item = items.next();
+        item.status.setValue(FetchItem.Status.DOWNLOADING);
+        DownloadItemWorker worker = new DownloadItemWorker(
+                item,
+                errorReporter,
+                httpService,
+                downloadDir,
+                () -> downloadNext(items, downloadDir)
+        );
+        worker.execute();
     }
 
     private void updateDirectoryInput() {
@@ -113,16 +119,7 @@ public final class DownloadComponent {
         return container;
     }
 
-    private static DefaultTableModel getTableModel() {
-        return new DefaultTableModel(new Object[]{"ID", "Kod", "Data", "Status"}, 10) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-    }
-
-    private static JTable getTable(DefaultTableModel tableModel) {
+    private static JTable getTable(FetchItemsTableModel tableModel) {
         JTable table = new JTable(tableModel);
         table.setPreferredScrollableViewportSize(new Dimension(400, 200));
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {

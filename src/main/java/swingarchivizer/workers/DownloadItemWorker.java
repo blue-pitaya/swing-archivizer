@@ -43,8 +43,10 @@ public final class DownloadItemWorker extends SwingWorker<Void, Void> {
     protected void done() {
         try {
             get();
+            item.status.setValue(FetchItem.Status.DONE);
         } catch (InterruptedException | ExecutionException e) {
             errorReporter.report(e);
+            item.status.setValue(FetchItem.Status.ERROR);
         } finally {
             onDone.run();
         }

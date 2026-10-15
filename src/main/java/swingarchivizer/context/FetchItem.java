@@ -1,12 +1,14 @@
 package swingarchivizer.context;
 
 import swingarchivizer.dto.Item;
+import swingarchivizer.util.Observable;
 
 public final class FetchItem {
     public enum Status {
         QUEUED("W kolejce"),
         DOWNLOADING("Pobieranie..."),
-        DONE("Zakończono");
+        DONE("Zakończono"),
+        ERROR("Błąd");
 
         public final String label;
 
@@ -16,10 +18,10 @@ public final class FetchItem {
     }
 
     public Item value;
-    public Status status;
+    public Observable<Status> status;
 
     public FetchItem(Item value) {
         this.value = value;
-        this.status = Status.QUEUED;
+        this.status = new Observable<>(Status.QUEUED);
     }
 }

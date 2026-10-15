@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+//FIXME: make it safe for swing threads
 public final class Observable<T> {
     private final List<Consumer<T>> listeners = new ArrayList<>();
     private T value;
