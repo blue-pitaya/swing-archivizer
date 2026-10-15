@@ -1,7 +1,7 @@
 package swingarchivizer.workers;
 
 import swingarchivizer.HttpService;
-import swingarchivizer.dto.FetchItem;
+import swingarchivizer.context.FetchItem;
 
 import javax.swing.*;
 import java.io.IOException;

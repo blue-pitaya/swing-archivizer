@@ -1,6 +1,10 @@
-package swingarchivizer;
+package swingarchivizer.components;
 
-import swingarchivizer.dto.FetchItem;
+import swingarchivizer.ErrorReporter;
+import swingarchivizer.HttpService;
+import swingarchivizer.context.AppContext;
+import swingarchivizer.context.FetchItem;
+import swingarchivizer.context.FetchState;
 import swingarchivizer.workers.DownloadItemWorker;
 
 import javax.swing.*;

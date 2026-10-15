@@ -1,6 +1,6 @@
-package swingarchivizer;
+package swingarchivizer.context;
 
-import swingarchivizer.dto.FetchItem;
+import swingarchivizer.util.Observable;
 
 import java.util.ArrayList;
 import java.util.List;

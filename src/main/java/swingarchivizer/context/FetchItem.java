@@ -1,4 +1,6 @@
-package swingarchivizer.dto;
+package swingarchivizer.context;
+
+import swingarchivizer.dto.Item;
 
 public final class FetchItem {
     public enum Status {

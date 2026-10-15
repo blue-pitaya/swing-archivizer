@@ -1,32 +1,32 @@
-package swingarchivizer;
+package swingarchivizer.components;
 
-import swingarchivizer.dto.FetchItem;
-import swingarchivizer.dto.Item;
+import swingarchivizer.ErrorReporter;
+import swingarchivizer.HttpService;
+import swingarchivizer.context.AppContext;
+import swingarchivizer.context.FetchState;
+import swingarchivizer.workers.FetchItemsWorker;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 public final class FirstForm {
 
     private final AppContext ctx;
     private final ErrorReporter errorReporter;
+    private final HttpService httpService;
 
     private final JPanel form = new JPanel(new GridBagLayout());
     private final UniDateInput dateFormInput = new UniDateInput("Data początkowa");
     private final UniDateInput dateToInput = new UniDateInput("Data końcowa");
     private final JButton confirmButton = new JButton("Pobierz");
 
-    public FirstForm(AppContext ctx, ErrorReporter errorReporter) {
+    public FirstForm(AppContext ctx, ErrorReporter errorReporter, HttpService httpService) {
         this.errorReporter = errorReporter;
         this.ctx = ctx;
+        this.httpService = httpService;
 
         dateFormInput.getInput().setText("2026-01-01");
         dateToInput.getInput().setText("2026-01-31");
@@ -59,27 +59,7 @@ public final class FirstForm {
         }
 
         ctx.getUiBusy().setValue(true);
-        new SwingWorker<List<Item>, Void>() {
-            @Override
-            protected List<Item> doInBackground() throws IOException {
-                //FIXME:
-                return Arrays.asList(new HttpService().postItemsIds(from.get(), to.get()));
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    List<FetchItem> items = get().stream()
-                            .map(FetchItem::new)
-                            .collect(Collectors.toList());
-                    ctx.getItems().setValue(items);
-                } catch (InterruptedException | ExecutionException e) {
-                    errorReporter.report(e);
-                } finally {
-                    ctx.getUiBusy().setValue(false);
-                }
-            }
-        }.execute();
+        new FetchItemsWorker(ctx, errorReporter, httpService, from.get(), to.get()).execute();
     }
 
     private static GridBagConstraints getConstraints(int x, int y) {

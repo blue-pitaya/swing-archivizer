@@ -1,5 +1,9 @@
 package swingarchivizer;
 
+import swingarchivizer.components.DownloadComponent;
+import swingarchivizer.components.FirstForm;
+import swingarchivizer.context.AppContext;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,7 +16,7 @@ public class App {
             JFrame frame = new JFrame("Archivizer v1.0");
             ErrorReporter er = new ErrorReporter(frame);
 
-            FirstForm firstForm = new FirstForm(ctx, er);
+            FirstForm firstForm = new FirstForm(ctx, er, httpService);
             frame.add(firstForm.getComponent(), BorderLayout.NORTH);
 
             DownloadComponent downloadComponent = new DownloadComponent(ctx, er, httpService);

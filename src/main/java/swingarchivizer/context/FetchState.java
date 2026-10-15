@@ -1,4 +1,4 @@
-package swingarchivizer;
+package swingarchivizer.context;
 
 public enum FetchState {
     NEW("Gotowy"),
