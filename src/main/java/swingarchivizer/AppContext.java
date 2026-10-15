@@ -1,19 +1,19 @@
 package swingarchivizer;
 
-import swingarchivizer.dto.Item;
+import swingarchivizer.dto.FetchItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class AppContext {
-    private final Observable<List<Item>> items = new Observable<>(new ArrayList<>());
+    private final Observable<List<FetchItem>> items = new Observable<>(new ArrayList<>());
     private final Observable<Boolean> uiBusy = new Observable<>(false);
     private final Observable<FetchState> fetchState = new Observable<>(FetchState.NEW);
 
     public AppContext() {
     }
 
-    public Observable<List<Item>> getItems() {
+    public Observable<List<FetchItem>> getItems() {
         return items;
     }
 

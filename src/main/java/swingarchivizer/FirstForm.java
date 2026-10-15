@@ -1,5 +1,6 @@
 package swingarchivizer;
 
+import swingarchivizer.dto.FetchItem;
 import swingarchivizer.dto.Item;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public final class FirstForm {
 
@@ -60,13 +62,17 @@ public final class FirstForm {
         new SwingWorker<List<Item>, Void>() {
             @Override
             protected List<Item> doInBackground() throws IOException {
+                //FIXME:
                 return Arrays.asList(new HttpService().postItemsIds(from.get(), to.get()));
             }
 
             @Override
             protected void done() {
                 try {
-                    ctx.getItems().setValue(get());
+                    List<FetchItem> items = get().stream()
+                            .map(FetchItem::new)
+                            .collect(Collectors.toList());
+                    ctx.getItems().setValue(items);
                 } catch (InterruptedException | ExecutionException e) {
                     errorReporter.report(e);
                 } finally {

@@ -46,6 +46,13 @@ FILE_PATH = Path(__file__).resolve().parent / "Shrek.png"
 
 
 class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        time.sleep(DELAY_SECONDS)
+        if self.path.startswith("/items/"):
+            self.handle_download(self.path[len("/items/") :])
+        else:
+            self.send_json(404, {"error": "Not found"})
+
     def do_POST(self):
         time.sleep(DELAY_SECONDS)
         if self.path == "/items":

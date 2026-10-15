@@ -1,6 +1,7 @@
 package swingarchivizer;
 
-import swingarchivizer.dto.Item;
+import swingarchivizer.dto.FetchItem;
+import swingarchivizer.workers.DownloadItemWorker;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -9,12 +10,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 public final class DownloadComponent {
 
     private final AppContext ctx;
     private final ErrorReporter errorReporter;
+    private final HttpService httpService;
 
     private final JPanel container = new JPanel(new GridBagLayout());
     private final DefaultTableModel tableModel = getTableModel();
@@ -24,9 +28,10 @@ public final class DownloadComponent {
     private final JButton startButton = new JButton("Rozpocznij");
     private final JButton stopButton = new JButton("Zatrzymaj");
 
-    public DownloadComponent(AppContext ctx, ErrorReporter errorReporter) {
+    public DownloadComponent(AppContext ctx, ErrorReporter errorReporter, HttpService httpService) {
         this.errorReporter = errorReporter;
         this.ctx = ctx;
+        this.httpService = httpService;
 
         GridBagConstraints tableGridBagConstraints = getConstraints(0);
         tableGridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -48,8 +53,8 @@ public final class DownloadComponent {
 
         ctx.getItems().subscribeAndCall(items -> SwingUtilities.invokeLater(() -> {
             tableModel.setRowCount(0);
-            for (Item item : items) {
-                tableModel.addRow(new Object[]{item.id, item.code, item.date, "W kolejce"});
+            for (FetchItem item : items) {
+                tableModel.addRow(new Object[]{item.value.id, item.value.code, item.value.date, item.status.label});
             }
             updateButtons();
         }));
@@ -72,23 +77,17 @@ public final class DownloadComponent {
         }
 
         ctx.getFetchState().setValue(FetchState.RUNNING);
-        //new SwingWorker<List<Item>, Void>() {
-        //    @Override
-        //    protected List<Item> doInBackground() throws IOException {
-        //        return Arrays.asList(new HttpService().postItemsIds(from.get(), to.get()));
-        //    }
+        Path downloadDir = path.get();
+        List<FetchItem> items = ctx.getItems().getValue();
+        downloadNext(items.iterator(), downloadDir);
+    }
 
-        //    @Override
-        //    protected void done() {
-        //        try {
-        //            ctx.getItems().setValue(get());
-        //        } catch (InterruptedException | ExecutionException e) {
-        //            errorReporter.report(e);
-        //        } finally {
-        //            ctx.getUiBusy().setValue(false);
-        //        }
-        //    }
-        //}.execute();
+    private void downloadNext(Iterator<FetchItem> items, Path downloadDir) {
+        if (!items.hasNext()) {
+            return;
+        }
+
+        new DownloadItemWorker(items.next(), httpService, downloadDir, () -> downloadNext(items, downloadDir)).execute();
     }
 
     private void updateDirectoryInput() {

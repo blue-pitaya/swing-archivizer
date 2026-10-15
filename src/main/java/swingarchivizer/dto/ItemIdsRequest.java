@@ -1,4 +1,4 @@
-package swingarchivizer;
+package swingarchivizer.dto;
 
 import java.time.LocalDate;
 
