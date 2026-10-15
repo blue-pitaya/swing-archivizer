@@ -1,6 +1,6 @@
 package swingarchivizer.workers;
 
-import swingarchivizer.ErrorReporter;
+import swingarchivizer.MessageDialogHelper;
 import swingarchivizer.HttpService;
 import swingarchivizer.context.AppContext;
 import swingarchivizer.context.FetchItem;
@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 public final class FetchItemsWorker extends SwingWorker<List<Item>, Void> {
 
     private final AppContext ctx;
-    private final ErrorReporter errorReporter;
+    private final MessageDialogHelper messageDialogHelper;
     private final HttpService httpService;
     private final LocalDate from;
     private final LocalDate to;
 
     public FetchItemsWorker(
             AppContext ctx,
-            ErrorReporter errorReporter,
+            MessageDialogHelper messageDialogHelper,
             HttpService httpService,
             LocalDate from,
             LocalDate to
@@ -32,7 +32,7 @@ public final class FetchItemsWorker extends SwingWorker<List<Item>, Void> {
         super();
 
         this.ctx = ctx;
-        this.errorReporter = errorReporter;
+        this.messageDialogHelper = messageDialogHelper;
         this.httpService = httpService;
         this.from = from;
         this.to = to;
@@ -51,7 +51,7 @@ public final class FetchItemsWorker extends SwingWorker<List<Item>, Void> {
                     .collect(Collectors.toList());
             ctx.getItems().setValue(items);
         } catch (InterruptedException | ExecutionException e) {
-            errorReporter.report(e);
+            messageDialogHelper.report(e);
         } finally {
             ctx.getUiBusy().setValue(false);
         }

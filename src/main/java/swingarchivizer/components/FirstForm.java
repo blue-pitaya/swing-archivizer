@@ -1,6 +1,6 @@
 package swingarchivizer.components;
 
-import swingarchivizer.ErrorReporter;
+import swingarchivizer.MessageDialogHelper;
 import swingarchivizer.HttpService;
 import swingarchivizer.context.AppContext;
 import swingarchivizer.context.FetchState;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public final class FirstForm {
 
     private final AppContext ctx;
-    private final ErrorReporter errorReporter;
+    private final MessageDialogHelper messageDialogHelper;
     private final HttpService httpService;
 
     private final JPanel form = new JPanel(new GridBagLayout());
@@ -23,8 +23,8 @@ public final class FirstForm {
     private final UniDateInput dateToInput = new UniDateInput("Data końcowa");
     private final JButton confirmButton = new JButton("Pobierz");
 
-    public FirstForm(AppContext ctx, ErrorReporter errorReporter, HttpService httpService) {
-        this.errorReporter = errorReporter;
+    public FirstForm(AppContext ctx, MessageDialogHelper messageDialogHelper, HttpService httpService) {
+        this.messageDialogHelper = messageDialogHelper;
         this.ctx = ctx;
         this.httpService = httpService;
 
@@ -59,7 +59,7 @@ public final class FirstForm {
         }
 
         ctx.getUiBusy().setValue(true);
-        new FetchItemsWorker(ctx, errorReporter, httpService, from.get(), to.get()).execute();
+        new FetchItemsWorker(ctx, messageDialogHelper, httpService, from.get(), to.get()).execute();
     }
 
     private static GridBagConstraints getConstraints(int x, int y) {

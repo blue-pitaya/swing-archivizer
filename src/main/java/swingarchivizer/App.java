@@ -14,12 +14,12 @@ public class App {
 
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Archivizer v1.0");
-            ErrorReporter er = new ErrorReporter(frame);
+            MessageDialogHelper messageDialogHelper = new MessageDialogHelper(frame);
 
-            FirstForm firstForm = new FirstForm(ctx, er, httpService);
+            FirstForm firstForm = new FirstForm(ctx, messageDialogHelper, httpService);
             frame.add(firstForm.getComponent(), BorderLayout.NORTH);
 
-            DownloadComponent downloadComponent = new DownloadComponent(ctx, er, httpService);
+            DownloadComponent downloadComponent = new DownloadComponent(ctx, messageDialogHelper, httpService);
             frame.add(downloadComponent.getComponent(), BorderLayout.CENTER);
 
             frame.setMinimumSize(new Dimension(100, 200));

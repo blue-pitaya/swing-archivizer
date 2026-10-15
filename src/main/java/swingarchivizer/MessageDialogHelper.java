@@ -2,10 +2,10 @@ package swingarchivizer;
 
 import javax.swing.*;
 
-public final class ErrorReporter {
+public final class MessageDialogHelper {
     private final JFrame frame;
 
-    public ErrorReporter(JFrame frame) {
+    public MessageDialogHelper(JFrame frame) {
         this.frame = frame;
     }
 

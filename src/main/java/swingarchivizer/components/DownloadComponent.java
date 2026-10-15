@@ -1,6 +1,6 @@
 package swingarchivizer.components;
 
-import swingarchivizer.ErrorReporter;
+import swingarchivizer.MessageDialogHelper;
 import swingarchivizer.HttpService;
 import swingarchivizer.context.AppContext;
 import swingarchivizer.context.FetchItem;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public final class DownloadComponent {
 
     private final AppContext ctx;
-    private final ErrorReporter errorReporter;
+    private final MessageDialogHelper messageDialogHelper;
     private final HttpService httpService;
 
     private final JPanel container = new JPanel(new GridBagLayout());
@@ -31,8 +31,8 @@ public final class DownloadComponent {
     private final JButton startButton = new JButton("Rozpocznij");
     private final JButton stopButton = new JButton("Zatrzymaj");
 
-    public DownloadComponent(AppContext ctx, ErrorReporter errorReporter, HttpService httpService) {
-        this.errorReporter = errorReporter;
+    public DownloadComponent(AppContext ctx, MessageDialogHelper messageDialogHelper, HttpService httpService) {
+        this.messageDialogHelper = messageDialogHelper;
         this.ctx = ctx;
         this.httpService = httpService;
 
@@ -84,7 +84,7 @@ public final class DownloadComponent {
 
     private void downloadNext(Iterator<FetchItem> items, Path downloadDir) {
         if (!items.hasNext()) {
-            errorReporter.success("Zakończono pobieranie");
+            messageDialogHelper.success("Zakończono pobieranie");
             return;
         }
 
@@ -92,7 +92,7 @@ public final class DownloadComponent {
         item.status.setValue(FetchItem.Status.DOWNLOADING);
         DownloadItemWorker worker = new DownloadItemWorker(
                 item,
-                errorReporter,
+                messageDialogHelper,
                 httpService,
                 downloadDir,
                 () -> downloadNext(items, downloadDir)
