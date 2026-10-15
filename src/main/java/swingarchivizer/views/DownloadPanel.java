@@ -1,7 +1,8 @@
-package swingarchivizer.components;
+package swingarchivizer.views;
 
 import swingarchivizer.MessageDialogHelper;
 import swingarchivizer.HttpService;
+import swingarchivizer.components.UniDirectoryInput;
 import swingarchivizer.context.AppContext;
 import swingarchivizer.context.FetchItem;
 import swingarchivizer.context.FetchState;
@@ -17,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public final class DownloadComponent {
+public final class DownloadPanel {
 
     private final AppContext ctx;
     private final MessageDialogHelper messageDialogHelper;
@@ -31,7 +32,7 @@ public final class DownloadComponent {
     private final JButton startButton = new JButton("Rozpocznij");
     private final JButton stopButton = new JButton("Zatrzymaj");
 
-    public DownloadComponent(AppContext ctx, MessageDialogHelper messageDialogHelper, HttpService httpService) {
+    public DownloadPanel(AppContext ctx, MessageDialogHelper messageDialogHelper, HttpService httpService) {
         this.messageDialogHelper = messageDialogHelper;
         this.ctx = ctx;
         this.httpService = httpService;

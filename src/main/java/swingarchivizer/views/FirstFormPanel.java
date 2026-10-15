@@ -1,7 +1,8 @@
-package swingarchivizer.components;
+package swingarchivizer.views;
 
 import swingarchivizer.MessageDialogHelper;
 import swingarchivizer.HttpService;
+import swingarchivizer.components.UniDateInput;
 import swingarchivizer.context.AppContext;
 import swingarchivizer.context.FetchState;
 import swingarchivizer.workers.FetchItemsWorker;
@@ -12,7 +13,7 @@ import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public final class FirstForm {
+public final class FirstFormPanel {
 
     private final AppContext ctx;
     private final MessageDialogHelper messageDialogHelper;
@@ -23,7 +24,7 @@ public final class FirstForm {
     private final UniDateInput dateToInput = new UniDateInput("Data końcowa");
     private final JButton confirmButton = new JButton("Pobierz");
 
-    public FirstForm(AppContext ctx, MessageDialogHelper messageDialogHelper, HttpService httpService) {
+    public FirstFormPanel(AppContext ctx, MessageDialogHelper messageDialogHelper, HttpService httpService) {
         this.messageDialogHelper = messageDialogHelper;
         this.ctx = ctx;
         this.httpService = httpService;

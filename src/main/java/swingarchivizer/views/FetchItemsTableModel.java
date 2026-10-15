@@ -1,4 +1,4 @@
-package swingarchivizer.components;
+package swingarchivizer.views;
 
 import swingarchivizer.context.FetchItem;
 

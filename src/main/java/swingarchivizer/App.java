@@ -1,8 +1,8 @@
 package swingarchivizer;
 
-import swingarchivizer.components.DownloadComponent;
-import swingarchivizer.components.FirstForm;
 import swingarchivizer.context.AppContext;
+import swingarchivizer.views.DownloadPanel;
+import swingarchivizer.views.FirstFormPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,11 +16,11 @@ public class App {
             JFrame frame = new JFrame("Archivizer v1.0");
             MessageDialogHelper messageDialogHelper = new MessageDialogHelper(frame);
 
-            FirstForm firstForm = new FirstForm(ctx, messageDialogHelper, httpService);
-            frame.add(firstForm.getComponent(), BorderLayout.NORTH);
+            FirstFormPanel firstFormPanel = new FirstFormPanel(ctx, messageDialogHelper, httpService);
+            frame.add(firstFormPanel.getComponent(), BorderLayout.NORTH);
 
-            DownloadComponent downloadComponent = new DownloadComponent(ctx, messageDialogHelper, httpService);
-            frame.add(downloadComponent.getComponent(), BorderLayout.CENTER);
+            DownloadPanel downloadPanel = new DownloadPanel(ctx, messageDialogHelper, httpService);
+            frame.add(downloadPanel.getComponent(), BorderLayout.CENTER);
 
             frame.setMinimumSize(new Dimension(100, 200));
             frame.pack();
