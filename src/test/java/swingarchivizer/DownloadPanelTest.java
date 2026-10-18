@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import java.awt.Component;
 import java.util.Collections;
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,11 +64,7 @@ class DownloadPanelTest {
     }
 
     private void createPanel() throws Exception {
-        SwingUtilities.invokeAndWait(() -> {
-            Notifier notifier = new FakeNotifier();
-            FetchService fetchService = new FetchService(notifier, new HttpService(), busy -> { });
-            panel = new DownloadPanel(notifier, fetchService, busy -> { });
-        });
+        SwingUtilities.invokeAndWait(() -> panel = new DownloadPanel(new FakeHandler()));
     }
 
     private JTable table() {
@@ -88,13 +87,33 @@ class DownloadPanelTest {
         return (JButton) ((JPanel) panel.getComponent(3)).getComponent(1);
     }
 
-    private static final class FakeNotifier implements Notifier {
+    private static final class FakeHandler implements DownloadHandler {
         @Override
-        public void report(Exception e) {
+        public void startDownload(String directory, List<FetchItem> items) {
         }
 
         @Override
-        public void showSuccess(String message) {
+        public void setDirectoryValidationListener(Consumer<ValidationEvent> listener) {
+        }
+
+        @Override
+        public void setFetchStateListener(Consumer<DownloadPanel.FetchState> listener) {
+        }
+
+        @Override
+        public void setItemStatusListener(BiConsumer<FetchItem, FetchItem.Status> listener) {
+        }
+
+        @Override
+        public void setItemsListener(Consumer<List<FetchItem>> listener) {
+        }
+
+        @Override
+        public void setErrorListener(Consumer<Exception> listener) {
+        }
+
+        @Override
+        public void setFinishedListener(Runnable listener) {
         }
     }
 }

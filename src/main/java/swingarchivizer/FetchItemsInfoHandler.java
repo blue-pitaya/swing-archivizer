@@ -8,4 +8,7 @@ public interface FetchItemsInfoHandler {
 
     void setFromValidationListener(Consumer<ValidationEvent> listener);
 
-    void setToValidationListener(Consumer<ValidationEvent> listener);}
+    void setToValidationListener(Consumer<ValidationEvent> listener);
+
+    void setErrorListener(Consumer<Exception> listener);
+}

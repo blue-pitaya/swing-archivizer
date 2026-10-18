@@ -2,11 +2,8 @@ package swingarchivizer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 public final class DownloadPanel extends JPanel implements BusyAware {
 
@@ -28,10 +25,6 @@ public final class DownloadPanel extends JPanel implements BusyAware {
         }
     }
 
-    private final Notifier notifier;
-    private final FetchService fetchService;
-    private final BusyAware downloadBlocker;
-
     private final FetchItemsTable table = new FetchItemsTable();
     private final UniDirectoryInput directoryInput = new UniDirectoryInput("Katalog docelowy");
     private final JLabel statusLabel = new JLabel();
@@ -41,16 +34,8 @@ public final class DownloadPanel extends JPanel implements BusyAware {
     private boolean busy;
     private FetchState fetchState;
 
-    public DownloadPanel(
-            Notifier notifier,
-            FetchService fetchService,
-            BusyAware downloadBlocker
-    ) {
+    public DownloadPanel(DownloadHandler handler) {
         super(new GridBagLayout());
-
-        this.notifier = notifier;
-        this.fetchService = fetchService;
-        this.downloadBlocker = downloadBlocker;
 
         GridBagConstraints tableGridBagConstraints = getConstraints(0);
         tableGridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -68,7 +53,14 @@ public final class DownloadPanel extends JPanel implements BusyAware {
         buttonsPanel.add(stopButton);
         add(buttonsPanel, getConstraints(3));
 
-        startButton.addActionListener(event -> start());
+        handler.setDirectoryValidationListener(directoryInput::handleValidationEvent);
+        handler.setFetchStateListener(this::setFetchState);
+        handler.setItemStatusListener(table::setStatus);
+        handler.setItemsListener(this::setItems);
+        handler.setErrorListener(this::showError);
+        handler.setFinishedListener(this::showFinished);
+
+        startButton.addActionListener(event -> handler.startDownload(directoryInput.getText(), table.getItems()));
         setFetchState(FetchState.NEW);
     }
 
@@ -92,33 +84,12 @@ public final class DownloadPanel extends JPanel implements BusyAware {
         updateButtons();
     }
 
-    private void start() {
-        Optional<Path> path = directoryInput.getValue();
-        if (!path.isPresent()) {
-            return;
-        }
-
-        setFetchState(FetchState.RUNNING);
-        downloadBlocker.setBusy(true);
-        Path downloadDir = path.get();
-        List<FetchItem> items = table.getItems();
-        downloadNext(items.iterator(), downloadDir);
+    private void showError(Exception e) {
+        JOptionPane.showMessageDialog(this, e, "Błąd", JOptionPane.ERROR_MESSAGE);
     }
 
-    private void downloadNext(Iterator<FetchItem> items, Path downloadDir) {
-        if (!items.hasNext()) {
-            setFetchState(FetchState.FINISHED);
-            downloadBlocker.setBusy(false);
-            notifier.showSuccess("Zakończono pobieranie");
-            return;
-        }
-
-        FetchItem item = items.next();
-        table.setStatus(item, FetchItem.Status.DOWNLOADING);
-        fetchService.downloadItem(item, downloadDir, status -> {
-            table.setStatus(item, status);
-            downloadNext(items, downloadDir);
-        });
+    private void showFinished() {
+        JOptionPane.showMessageDialog(this, "Zakończono pobieranie", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void updateDirectoryInput() {

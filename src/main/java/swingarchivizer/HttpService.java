@@ -71,6 +71,7 @@ public final class HttpService {
                 throw new IOException("HTTP " + response.code() + ": " + body);
             }
 
+            //TODO: too coupled
             Path itemDir = Files.createDirectories(downloadDir.resolve(String.valueOf(id)));
             Files.copy(response.body().byteStream(), itemDir.resolve(getFileName(response)), StandardCopyOption.REPLACE_EXISTING);
         }

@@ -10,18 +10,19 @@ public final class FetchItemsInfoFormPanel extends JPanel implements BusyAware {
     private final JButton confirmButton = new JButton("Pobierz");
 
     public FetchItemsInfoFormPanel(
-            DefaultDatesProvider defaultDatesProvider,
+            AppConfig config,
             FetchItemsInfoHandler handler
     ) {
         super(new GridBagLayout());
 
         dateFormInput.setPlaceholder("YYYY-MM-DD");
-        dateFormInput.setText(defaultDatesProvider.getFromDate());
+        dateFormInput.setText(config.getDefaultFromDate().toString());
         handler.setFromValidationListener(dateFormInput::handleValidationEvent);
 
         dateToInput.setPlaceholder("YYYY-MM-DD");
-        dateToInput.setText(defaultDatesProvider.getToDate());
+        dateToInput.setText(config.getDefaultToDate().toString());
         handler.setToValidationListener(dateToInput::handleValidationEvent);
+        handler.setErrorListener(this::showError);
 
         confirmButton.addActionListener(e ->
                 handler.submitForm(dateFormInput.getText(), dateToInput.getText())
@@ -37,6 +38,10 @@ public final class FetchItemsInfoFormPanel extends JPanel implements BusyAware {
         dateFormInput.setEnabled(!busy);
         dateToInput.setEnabled(!busy);
         confirmButton.setEnabled(!busy);
+    }
+
+    private void showError(Exception e) {
+        JOptionPane.showMessageDialog(this, e, "Błąd", JOptionPane.ERROR_MESSAGE);
     }
 
     private static GridBagConstraints getConstraints(int x, int y) {

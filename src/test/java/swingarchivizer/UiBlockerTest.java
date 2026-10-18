@@ -19,7 +19,7 @@ class UiBlockerTest {
         uiBlocker.add(first::add, UiBlocker.Mode.FETCH);
         uiBlocker.add(second::add, UiBlocker.Mode.FETCH);
 
-        uiBlocker.forMode(UiBlocker.Mode.FETCH).setBusy(true);
+        uiBlocker.setBusy(UiBlocker.Mode.FETCH, true);
 
         assertEquals(Collections.singletonList(true), first);
         assertEquals(Collections.singletonList(true), second);
@@ -31,9 +31,9 @@ class UiBlockerTest {
         UiBlocker uiBlocker = new UiBlocker();
         uiBlocker.add(busy::add, UiBlocker.Mode.FETCH, UiBlocker.Mode.DOWNLOAD);
 
-        uiBlocker.forMode(UiBlocker.Mode.FETCH).setBusy(true);
-        uiBlocker.forMode(UiBlocker.Mode.DOWNLOAD).setBusy(true);
-        uiBlocker.forMode(UiBlocker.Mode.FETCH).setBusy(false);
+        uiBlocker.setBusy(UiBlocker.Mode.FETCH, true);
+        uiBlocker.setBusy(UiBlocker.Mode.DOWNLOAD, true);
+        uiBlocker.setBusy(UiBlocker.Mode.FETCH, false);
 
         assertEquals(Arrays.asList(true, true, true), busy);
     }

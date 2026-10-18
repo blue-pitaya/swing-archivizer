@@ -7,9 +7,17 @@ public class App {
         HttpService httpService = new HttpService();
         AppConfig config = new AppConfig();
         UiBlocker uiBlocker = new UiBlocker();
+        FetchService fetchService = new FetchService(httpService, uiBlocker);
+        DownloadHandlerImpl downloadHandler = new DownloadHandlerImpl(fetchService, uiBlocker);
+        FetchItemsInfoHandler fetchItemsInfoHandler = new FetchItemsInfoHandlerImpl(fetchService, uiBlocker, downloadHandler::showItems);
 
         SwingUtilities.invokeLater(() -> {
-            AppFrame frame = new AppFrame(httpService, config, uiBlocker);
+            AppFrame frame = new AppFrame(
+                    config,
+                    uiBlocker,
+                    fetchItemsInfoHandler,
+                    downloadHandler
+            );
             frame.setVisible(true);
         });
     }

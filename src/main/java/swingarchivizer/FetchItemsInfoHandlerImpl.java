@@ -8,19 +8,20 @@ import java.util.function.Consumer;
 final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
 
     private final FetchService fetchService;
-    private final BusyAware fetchBlocker;
+    private final UiBlocker uiBlocker;
     private final Consumer<List<FetchItem>> onItemsFetched;
 
     private Consumer<ValidationEvent> fromValidationListener;
     private Consumer<ValidationEvent> toValidationListener;
+    private Consumer<Exception> errorListener;
 
     FetchItemsInfoHandlerImpl(
             FetchService fetchService,
-            BusyAware fetchBlocker,
+            UiBlocker uiBlocker,
             Consumer<List<FetchItem>> onItemsFetched
     ) {
         this.fetchService = fetchService;
-        this.fetchBlocker = fetchBlocker;
+        this.uiBlocker = uiBlocker;
         this.onItemsFetched = onItemsFetched;
     }
 
@@ -51,8 +52,8 @@ final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
             return;
         }
 
-        fetchBlocker.setBusy(true);
-        fetchService.fetchItems(fromDate, toDate, onItemsFetched);
+        uiBlocker.setBusy(UiBlocker.Mode.FETCH, true);
+        fetchService.fetchItems(fromDate, toDate, onItemsFetched, errorListener);
     }
 
     @Override
@@ -63,5 +64,10 @@ final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
     @Override
     public void setToValidationListener(Consumer<ValidationEvent> listener) {
         toValidationListener = listener;
+    }
+
+    @Override
+    public void setErrorListener(Consumer<Exception> listener) {
+        errorListener = listener;
     }
 }

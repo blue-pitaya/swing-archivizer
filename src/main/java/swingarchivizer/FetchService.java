@@ -12,21 +12,18 @@ import java.util.stream.Collectors;
 
 public final class FetchService {
 
-    private final Notifier notifier;
     private final HttpService httpService;
-    private final BusyAware busyAware;
+    private final UiBlocker uiBlocker;
 
     public FetchService(
-            Notifier notifier,
             HttpService httpService,
-            BusyAware busyAware
+            UiBlocker uiBlocker
     ) {
-        this.notifier = notifier;
         this.httpService = httpService;
-        this.busyAware = busyAware;
+        this.uiBlocker = uiBlocker;
     }
 
-    public void fetchItems(LocalDate from, LocalDate to, Consumer<List<FetchItem>> onFetched) {
+    public void fetchItems(LocalDate from, LocalDate to, Consumer<List<FetchItem>> onFetched, Consumer<Exception> onError) {
         new SwingWorker<List<HttpService.Item>, Void>() {
             @Override
             protected List<HttpService.Item> doInBackground() throws IOException {
@@ -41,15 +38,15 @@ public final class FetchService {
                             .collect(Collectors.toList());
                     onFetched.accept(items);
                 } catch (InterruptedException | ExecutionException e) {
-                    notifier.report(e);
+                    onError.accept(e);
                 } finally {
-                    busyAware.setBusy(false);
+                    uiBlocker.setBusy(UiBlocker.Mode.FETCH, false);
                 }
             }
         }.execute();
     }
 
-    public void downloadItem(FetchItem item, Path downloadDir, Consumer<FetchItem.Status> onDone) {
+    public void downloadItem(FetchItem item, Path downloadDir, Consumer<FetchItem.Status> onDone, Consumer<Exception> onError) {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws IOException {
@@ -63,7 +60,7 @@ public final class FetchService {
                     get();
                     onDone.accept(FetchItem.Status.DONE);
                 } catch (InterruptedException | ExecutionException e) {
-                    notifier.report(e);
+                    onError.accept(e);
                     onDone.accept(FetchItem.Status.ERROR);
                 }
             }

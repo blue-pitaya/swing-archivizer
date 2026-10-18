@@ -13,4 +13,10 @@ public interface DownloadHandler {
     void setFetchStateListener(Consumer<DownloadPanel.FetchState> listener);
 
     void setItemStatusListener(BiConsumer<FetchItem, FetchItem.Status> listener);
+
+    void setItemsListener(Consumer<List<FetchItem>> listener);
+
+    void setErrorListener(Consumer<Exception> listener);
+
+    void setFinishedListener(Runnable listener);
 }

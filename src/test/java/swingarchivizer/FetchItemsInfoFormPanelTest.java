@@ -18,7 +18,7 @@ class FetchItemsInfoFormPanelTest {
         List<Boolean> enabled = new ArrayList<>();
 
         SwingUtilities.invokeAndWait(() -> {
-            FetchItemsInfoFormPanel panel = new FetchItemsInfoFormPanel(new FakeDatesProvider(), new FakeHandler());
+            FetchItemsInfoFormPanel panel = new FetchItemsInfoFormPanel(new AppConfig(), new FakeHandler());
             panel.setBusy(true);
             for (Component component : panel.getComponents()) {
                 enabled.add(component.isEnabled());
@@ -27,18 +27,6 @@ class FetchItemsInfoFormPanelTest {
 
         assertEquals(3, enabled.size());
         enabled.forEach(Assertions::assertFalse);
-    }
-
-    private static final class FakeDatesProvider implements DefaultDatesProvider {
-        @Override
-        public String getFromDate() {
-            return "2026-01-01";
-        }
-
-        @Override
-        public String getToDate() {
-            return "2026-01-31";
-        }
     }
 
     private static final class FakeHandler implements FetchItemsInfoHandler {
@@ -52,6 +40,10 @@ class FetchItemsInfoFormPanelTest {
 
         @Override
         public void setToValidationListener(Consumer<ValidationEvent> listener) {
+        }
+
+        @Override
+        public void setErrorListener(Consumer<Exception> listener) {
         }
     }
 }

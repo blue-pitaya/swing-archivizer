@@ -22,11 +22,7 @@ final class UiBlocker {
         panels.put(panel, panelModes);
     }
 
-    BusyAware forMode(Mode mode) {
-        return busy -> setBusy(mode, busy);
-    }
-
-    private void setBusy(Mode mode, boolean busy) {
+    void setBusy(Mode mode, boolean busy) {
         if (busy) {
             activeModes.add(mode);
         } else {
