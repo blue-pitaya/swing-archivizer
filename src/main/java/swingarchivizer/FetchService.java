@@ -12,16 +12,16 @@ import java.util.stream.Collectors;
 
 public final class FetchService {
 
-    private final MessageDialogHelper messageDialogHelper;
+    private final Notifier notifier;
     private final HttpService httpService;
     private final BusyAware busyAware;
 
     public FetchService(
-            MessageDialogHelper messageDialogHelper,
+            Notifier notifier,
             HttpService httpService,
             BusyAware busyAware
     ) {
-        this.messageDialogHelper = messageDialogHelper;
+        this.notifier = notifier;
         this.httpService = httpService;
         this.busyAware = busyAware;
     }
@@ -41,7 +41,7 @@ public final class FetchService {
                             .collect(Collectors.toList());
                     onFetched.accept(items);
                 } catch (InterruptedException | ExecutionException e) {
-                    messageDialogHelper.report(e);
+                    notifier.report(e);
                 } finally {
                     busyAware.setBusy(false);
                 }
@@ -63,7 +63,7 @@ public final class FetchService {
                     get();
                     onDone.accept(FetchItem.Status.DONE);
                 } catch (InterruptedException | ExecutionException e) {
-                    messageDialogHelper.report(e);
+                    notifier.report(e);
                     onDone.accept(FetchItem.Status.ERROR);
                 }
             }

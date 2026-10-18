@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
 
     private final FetchService fetchService;
-    private final UiBlocker uiBlocker;
+    private final BusyAware fetchBlocker;
     private final Consumer<List<FetchItem>> onItemsFetched;
 
     private Consumer<ValidationEvent> fromValidationListener;
@@ -16,11 +16,11 @@ final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
 
     FetchItemsInfoHandlerImpl(
             FetchService fetchService,
-            UiBlocker uiBlocker,
+            BusyAware fetchBlocker,
             Consumer<List<FetchItem>> onItemsFetched
     ) {
         this.fetchService = fetchService;
-        this.uiBlocker = uiBlocker;
+        this.fetchBlocker = fetchBlocker;
         this.onItemsFetched = onItemsFetched;
     }
 
@@ -51,7 +51,7 @@ final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
             return;
         }
 
-        uiBlocker.setBusy(true);
+        fetchBlocker.setBusy(true);
         fetchService.fetchItems(fromDate, toDate, onItemsFetched);
     }
 

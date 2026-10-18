@@ -28,8 +28,9 @@ public final class DownloadPanel extends JPanel implements BusyAware {
         }
     }
 
-    private final MessageDialogHelper messageDialogHelper;
+    private final Notifier notifier;
     private final FetchService fetchService;
+    private final BusyAware downloadBlocker;
 
     private final FetchItemsTable table = new FetchItemsTable();
     private final UniDirectoryInput directoryInput = new UniDirectoryInput("Katalog docelowy");
@@ -41,13 +42,15 @@ public final class DownloadPanel extends JPanel implements BusyAware {
     private FetchState fetchState;
 
     public DownloadPanel(
-            MessageDialogHelper messageDialogHelper,
-            FetchService fetchService
+            Notifier notifier,
+            FetchService fetchService,
+            BusyAware downloadBlocker
     ) {
         super(new GridBagLayout());
 
-        this.messageDialogHelper = messageDialogHelper;
+        this.notifier = notifier;
         this.fetchService = fetchService;
+        this.downloadBlocker = downloadBlocker;
 
         GridBagConstraints tableGridBagConstraints = getConstraints(0);
         tableGridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -96,6 +99,7 @@ public final class DownloadPanel extends JPanel implements BusyAware {
         }
 
         setFetchState(FetchState.RUNNING);
+        downloadBlocker.setBusy(true);
         Path downloadDir = path.get();
         List<FetchItem> items = table.getItems();
         downloadNext(items.iterator(), downloadDir);
@@ -104,7 +108,8 @@ public final class DownloadPanel extends JPanel implements BusyAware {
     private void downloadNext(Iterator<FetchItem> items, Path downloadDir) {
         if (!items.hasNext()) {
             setFetchState(FetchState.FINISHED);
-            messageDialogHelper.success("Zakończono pobieranie");
+            downloadBlocker.setBusy(false);
+            notifier.showSuccess("Zakończono pobieranie");
             return;
         }
 

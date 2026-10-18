@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 final class DownloadHandlerImpl implements DownloadHandler {
 
-    private final MessageDialogHelper messageDialogHelper;
+    private final Notifier notifier;
     private final FetchService fetchService;
 
     private Consumer<ValidationEvent> directoryValidationListener;
@@ -19,10 +19,10 @@ final class DownloadHandlerImpl implements DownloadHandler {
     private BiConsumer<FetchItem, FetchItem.Status> itemStatusListener;
 
     DownloadHandlerImpl(
-            MessageDialogHelper messageDialogHelper,
+            Notifier notifier,
             FetchService fetchService
     ) {
-        this.messageDialogHelper = messageDialogHelper;
+        this.notifier = notifier;
         this.fetchService = fetchService;
     }
 
@@ -63,7 +63,7 @@ final class DownloadHandlerImpl implements DownloadHandler {
     private void downloadNext(Iterator<FetchItem> items, Path downloadDir) {
         if (!items.hasNext()) {
             fetchStateListener.accept(DownloadPanel.FetchState.FINISHED);
-            messageDialogHelper.success("Zakończono pobieranie");
+            notifier.showSuccess("Zakończono pobieranie");
             return;
         }
 

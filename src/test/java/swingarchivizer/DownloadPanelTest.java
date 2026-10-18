@@ -62,9 +62,9 @@ class DownloadPanelTest {
 
     private void createPanel() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
-            MessageDialogHelper messageDialogHelper = new MessageDialogHelper(null);
-            FetchService fetchService = new FetchService(messageDialogHelper, new HttpService(), busy -> { });
-            panel = new DownloadPanel(messageDialogHelper, fetchService);
+            Notifier notifier = new FakeNotifier();
+            FetchService fetchService = new FetchService(notifier, new HttpService(), busy -> { });
+            panel = new DownloadPanel(notifier, fetchService, busy -> { });
         });
     }
 
@@ -86,5 +86,15 @@ class DownloadPanelTest {
 
     private JButton stopButton() {
         return (JButton) ((JPanel) panel.getComponent(3)).getComponent(1);
+    }
+
+    private static final class FakeNotifier implements Notifier {
+        @Override
+        public void report(Exception e) {
+        }
+
+        @Override
+        public void showSuccess(String message) {
+        }
     }
 }

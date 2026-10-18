@@ -1,20 +1,42 @@
 package swingarchivizer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
-final class UiBlocker implements BusyAware {
+final class UiBlocker {
 
-    private final List<BusyAware> panels = new ArrayList<>();
-
-    void add(BusyAware panel) {
-        panels.add(panel);
+    enum Mode {
+        FETCH,
+        DOWNLOAD
     }
 
-    @Override
-    public void setBusy(boolean busy) {
-        for (BusyAware panel : panels) {
-            panel.setBusy(busy);
+    private final Map<BusyAware, Set<Mode>> panels = new LinkedHashMap<>();
+    private final Set<Mode> activeModes = EnumSet.noneOf(Mode.class);
+
+    void add(BusyAware panel, Mode... modes) {
+        Set<Mode> panelModes = EnumSet.noneOf(Mode.class);
+        Collections.addAll(panelModes, modes);
+        panels.put(panel, panelModes);
+    }
+
+    BusyAware forMode(Mode mode) {
+        return busy -> setBusy(mode, busy);
+    }
+
+    private void setBusy(Mode mode, boolean busy) {
+        if (busy) {
+            activeModes.add(mode);
+        } else {
+            activeModes.remove(mode);
+        }
+
+        for (Map.Entry<BusyAware, Set<Mode>> entry : panels.entrySet()) {
+            if (entry.getValue().contains(mode)) {
+                entry.getKey().setBusy(!Collections.disjoint(entry.getValue(), activeModes));
+            }
         }
     }
 }
