@@ -13,7 +13,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class FirstFormPresenterTest {
+class FetchItemsInfoFormPresenterTest {
 
     private final AppContext ctx = new AppContext();
     private final FakeView view = new FakeView();
@@ -46,14 +46,14 @@ class FirstFormPresenterTest {
     }
 
     private void createPresenter() throws Exception {
-        SwingUtilities.invokeAndWait(() -> new FirstFormPresenter(view, ctx, new MessageDialogHelper(null), new HttpService()));
+        SwingUtilities.invokeAndWait(() -> new FetchItemsInfoFormPresenter(view, ctx, new MessageDialogHelper(null), new HttpService()));
     }
 
     private static void flushEdt() throws Exception {
         SwingUtilities.invokeAndWait(() -> { });
     }
 
-    private static final class FakeView implements FirstFormPresenter.View {
+    private static final class FakeView implements FetchItemsInfoFormPresenter.View {
         boolean formEnabled;
 
         @Override

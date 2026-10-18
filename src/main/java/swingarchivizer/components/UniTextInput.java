@@ -17,7 +17,7 @@ public final class UniTextInput extends JPanel {
     private final JLabel validationMessage;
     private String placeholder;
 
-    public UniTextInput(String labelText) {
+    UniTextInput(String labelText) {
         super(new GridBagLayout());
 
         field = new JTextField(20) {
@@ -68,11 +68,11 @@ public final class UniTextInput extends JPanel {
         field.setEnabled(enabled);
     }
 
-    public void setPlaceholder(String v) {
+    void setPlaceholder(String v) {
         placeholder = v;
     }
 
-    public void setValidationMessage(String v) {
+    void setValidationMessage(String v) {
         if (v == null || v.isEmpty()) {
             clearValidationMessage();
         }
@@ -80,7 +80,7 @@ public final class UniTextInput extends JPanel {
         field.setBorder(errorBorder);
     }
 
-    public void clearValidationMessage() {
+    void clearValidationMessage() {
         validationMessage.setText(EMPTY_VALIDATION_MESSAGE);
         field.setBorder(defaultBorder);
     }
@@ -89,7 +89,7 @@ public final class UniTextInput extends JPanel {
         field.setText(v);
     }
 
-    public String getText() {
+    String getText() {
         return field.getText();
     }
 }

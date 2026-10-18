@@ -1,21 +1,21 @@
 package swingarchivizer.views;
 
 import swingarchivizer.components.UniDateInput;
-import swingarchivizer.presenters.FirstFormPresenter;
+import swingarchivizer.presenters.FetchItemsInfoFormPresenter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public final class FirstFormPanel implements FirstFormPresenter.View {
+public final class FetchItemsInfoFormPanel implements FetchItemsInfoFormPresenter.View {
 
     private final JPanel form = new JPanel(new GridBagLayout());
     private final UniDateInput dateFormInput = new UniDateInput("Data początkowa");
     private final UniDateInput dateToInput = new UniDateInput("Data końcowa");
     private final JButton confirmButton = new JButton("Pobierz");
 
-    public FirstFormPanel() {
+    public FetchItemsInfoFormPanel() {
         dateFormInput.getInput().setText("2026-01-01");
         dateToInput.getInput().setText("2026-01-31");
 

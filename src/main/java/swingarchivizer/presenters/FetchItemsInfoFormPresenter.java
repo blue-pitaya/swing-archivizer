@@ -9,7 +9,7 @@ import swingarchivizer.workers.FetchItemsWorker;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public final class FirstFormPresenter {
+public final class FetchItemsInfoFormPresenter {
 
     public interface View {
         void addFetchListener(Runnable listener);
@@ -26,7 +26,7 @@ public final class FirstFormPresenter {
     private final MessageDialogHelper messageDialogHelper;
     private final HttpService httpService;
 
-    public FirstFormPresenter(
+    public FetchItemsInfoFormPresenter(
             View view,
             AppContext ctx,
             MessageDialogHelper messageDialogHelper,
