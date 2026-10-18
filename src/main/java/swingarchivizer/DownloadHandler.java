@@ -1,0 +1,16 @@
+package swingarchivizer;
+
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
+public interface DownloadHandler {
+
+    void startDownload(String directory, List<FetchItem> items);
+
+    void setDirectoryValidationListener(Consumer<ValidationEvent> listener);
+
+    void setFetchStateListener(Consumer<DownloadPanel.FetchState> listener);
+
+    void setItemStatusListener(BiConsumer<FetchItem, FetchItem.Status> listener);
+}
