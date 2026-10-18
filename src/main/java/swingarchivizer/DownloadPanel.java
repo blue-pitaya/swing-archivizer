@@ -4,10 +4,8 @@ import swingarchivizer.components.UniDirectoryInput;
 import swingarchivizer.context.AppContext;
 import swingarchivizer.context.FetchItem;
 import swingarchivizer.context.FetchState;
-import swingarchivizer.views.FetchItemsTableModel;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,8 +19,7 @@ public final class DownloadPanel extends JPanel implements BusyAware {
     private final MessageDialogHelper messageDialogHelper;
     private final FetchService fetchService;
 
-    private final FetchItemsTableModel tableModel = new FetchItemsTableModel();
-    private final JTable table = getTable(tableModel);
+    private final FetchItemsTable table = new FetchItemsTable();
     private final UniDirectoryInput directoryInput = new UniDirectoryInput("Katalog docelowy");
     private final JLabel statusLabel = new JLabel();
     private final JButton startButton = new JButton("Rozpocznij");
@@ -58,15 +55,16 @@ public final class DownloadPanel extends JPanel implements BusyAware {
         add(buttonsPanel, getConstraints(3));
 
         startButton.addActionListener(event -> start());
-        ctx.getItems().subscribeAndCall(items -> SwingUtilities.invokeLater(() -> {
-            tableModel.setItems(items);
-            updateButtons();
-        }));
         ctx.getFetchState().subscribeAndCall(fetchState -> {
             statusLabel.setText(fetchState.toString());
             updateDirectoryInput();
             updateButtons();
         });
+    }
+
+    public void setItems(List<FetchItem> items) {
+        table.setItems(items);
+        updateButtons();
     }
 
     @Override
@@ -85,7 +83,7 @@ public final class DownloadPanel extends JPanel implements BusyAware {
 
         ctx.getFetchState().setValue(FetchState.RUNNING);
         Path downloadDir = path.get();
-        List<FetchItem> items = ctx.getItems().getValue();
+        List<FetchItem> items = table.getItems();
         downloadNext(items.iterator(), downloadDir);
     }
 
@@ -112,25 +110,10 @@ public final class DownloadPanel extends JPanel implements BusyAware {
             return;
         }
 
-        boolean anyItems = !ctx.getItems().getValue().isEmpty();
+        boolean anyItems = !table.getItems().isEmpty();
         boolean finished = ctx.getFetchState().getValue() == FetchState.FINISHED;
         startButton.setEnabled(anyItems && !finished && ctx.getFetchState().getValue() != FetchState.RUNNING);
         stopButton.setEnabled(anyItems && !finished && ctx.getFetchState().getValue() != FetchState.NEW);
-    }
-
-    private static JTable getTable(FetchItemsTableModel tableModel) {
-        JTable table = new JTable(tableModel);
-        table.setPreferredScrollableViewportSize(new Dimension(400, 200));
-        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                c.setEnabled(table.isEnabled());
-                return c;
-            }
-        });
-
-        return table;
     }
 
     private static GridBagConstraints getConstraints(int y) {

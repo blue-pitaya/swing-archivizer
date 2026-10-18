@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public final class FetchService {
@@ -32,7 +33,7 @@ public final class FetchService {
         this.busyAware = busyAware;
     }
 
-    public void fetchItems(LocalDate from, LocalDate to) {
+    public void fetchItems(LocalDate from, LocalDate to, Consumer<List<FetchItem>> onFetched) {
         new SwingWorker<List<Item>, Void>() {
             @Override
             protected List<Item> doInBackground() throws IOException {
@@ -45,7 +46,7 @@ public final class FetchService {
                     List<FetchItem> items = get().stream()
                             .map(FetchItem::new)
                             .collect(Collectors.toList());
-                    ctx.getItems().setValue(items);
+                    onFetched.accept(items);
                     ctx.getFetchState().setValue(FetchState.NEW);
                 } catch (InterruptedException | ExecutionException e) {
                     messageDialogHelper.report(e);

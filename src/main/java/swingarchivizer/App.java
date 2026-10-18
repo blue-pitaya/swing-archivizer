@@ -1,11 +1,13 @@
 package swingarchivizer;
 
 import swingarchivizer.context.AppContext;
+import swingarchivizer.context.FetchItem;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class App {
@@ -20,13 +22,13 @@ public class App {
             UiBlocker uiBlocker = new UiBlocker();
             FetchService fetchService = new FetchService(ctx, messageDialogHelper, httpService, uiBlocker);
 
-            FetchItemsInfoFormPanel fetchItemsInfoFormPanel = getFetchItemsInfoFormPanel(config, fetchService, uiBlocker);
-            uiBlocker.add(fetchItemsInfoFormPanel);
-            frame.add(fetchItemsInfoFormPanel, BorderLayout.NORTH);
-
             DownloadPanel downloadPanel = new DownloadPanel(ctx, messageDialogHelper, fetchService);
             uiBlocker.add(downloadPanel);
             frame.add(downloadPanel, BorderLayout.CENTER);
+
+            FetchItemsInfoFormPanel fetchItemsInfoFormPanel = getFetchItemsInfoFormPanel(config, fetchService, uiBlocker, downloadPanel::setItems);
+            uiBlocker.add(fetchItemsInfoFormPanel);
+            frame.add(fetchItemsInfoFormPanel, BorderLayout.NORTH);
 
             frame.setMinimumSize(new Dimension(100, 200));
             frame.pack();
@@ -39,7 +41,8 @@ public class App {
     private static FetchItemsInfoFormPanel getFetchItemsInfoFormPanel(
             AppConfig appConfig,
             FetchService fetchService,
-            UiBlocker uiBlocker
+            UiBlocker uiBlocker,
+            Consumer<List<FetchItem>> onItemsFetched
     ) {
         DefaultDatesProvider ddp = new DefaultDatesProvider() {
 
@@ -86,7 +89,7 @@ public class App {
                 }
 
                 uiBlocker.setBusy(true);
-                fetchService.fetchItems(fromDate, toDate);
+                fetchService.fetchItems(fromDate, toDate, onItemsFetched);
             }
 
             @Override

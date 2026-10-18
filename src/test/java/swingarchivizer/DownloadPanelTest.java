@@ -33,9 +33,7 @@ class DownloadPanelTest {
     void showsLoadedItemsAndEnablesStart() throws Exception {
         createPanel();
 
-        ctx.getItems().setValue(Collections.singletonList(new FetchItem(new Item())));
-        flushEdt();
-        flushEdt();
+        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new Item()))));
 
         assertEquals(1, table().getRowCount());
         assertTrue(startButton().isEnabled());
@@ -47,9 +45,8 @@ class DownloadPanelTest {
     void runningDownloadEnablesStopAndLocksDirectory() throws Exception {
         createPanel();
 
-        ctx.getItems().setValue(Collections.singletonList(new FetchItem(new Item())));
+        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new Item()))));
         ctx.getFetchState().setValue(FetchState.RUNNING);
-        flushEdt();
         flushEdt();
 
         assertFalse(startButton().isEnabled());
@@ -61,9 +58,7 @@ class DownloadPanelTest {
     void busyDisablesTableAndButtons() throws Exception {
         createPanel();
 
-        ctx.getItems().setValue(Collections.singletonList(new FetchItem(new Item())));
-        flushEdt();
-        flushEdt();
+        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new Item()))));
         SwingUtilities.invokeAndWait(() -> panel.setBusy(true));
 
         assertFalse(table().isEnabled());
