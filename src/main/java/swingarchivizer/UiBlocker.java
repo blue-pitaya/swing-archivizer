@@ -13,10 +13,10 @@ final class UiBlocker {
         DOWNLOAD
     }
 
-    private final Map<BusyAware, Set<Mode>> panels = new LinkedHashMap<>();
+    private final Map<BusyListener, Set<Mode>> panels = new LinkedHashMap<>();
     private final Set<Mode> activeModes = EnumSet.noneOf(Mode.class);
 
-    void add(BusyAware panel, Mode... modes) {
+    void add(BusyListener panel, Mode... modes) {
         Set<Mode> panelModes = EnumSet.noneOf(Mode.class);
         Collections.addAll(panelModes, modes);
         panels.put(panel, panelModes);
@@ -29,9 +29,9 @@ final class UiBlocker {
             activeModes.remove(mode);
         }
 
-        for (Map.Entry<BusyAware, Set<Mode>> entry : panels.entrySet()) {
+        for (Map.Entry<BusyListener, Set<Mode>> entry : panels.entrySet()) {
             if (entry.getValue().contains(mode)) {
-                entry.getKey().setBusy(!Collections.disjoint(entry.getValue(), activeModes));
+                entry.getKey().busyChanged(!Collections.disjoint(entry.getValue(), activeModes));
             }
         }
     }

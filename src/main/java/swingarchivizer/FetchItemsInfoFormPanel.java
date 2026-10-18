@@ -3,7 +3,7 @@ package swingarchivizer;
 import javax.swing.*;
 import java.awt.*;
 
-final class FetchItemsInfoFormPanel extends JPanel implements BusyAware {
+final class FetchItemsInfoFormPanel extends JPanel implements BusyListener {
 
     private final UniTextInput dateFormInput = new UniTextInput("Data początkowa");
     private final UniTextInput dateToInput = new UniTextInput("Data końcowa");
@@ -17,12 +17,26 @@ final class FetchItemsInfoFormPanel extends JPanel implements BusyAware {
 
         dateFormInput.setPlaceholder("YYYY-MM-DD");
         dateFormInput.setText(config.getDefaultFromDate().toString());
-        handler.setFromValidationListener(dateFormInput::handleValidationEvent);
 
         dateToInput.setPlaceholder("YYYY-MM-DD");
         dateToInput.setText(config.getDefaultToDate().toString());
-        handler.setToValidationListener(dateToInput::handleValidationEvent);
-        handler.setErrorListener(this::showError);
+
+        handler.setListener(new FetchItemsInfoListener() {
+            @Override
+            public void fromValidated(ValidationEvent event) {
+                dateFormInput.handleValidationEvent(event);
+            }
+
+            @Override
+            public void toValidated(ValidationEvent event) {
+                dateToInput.handleValidationEvent(event);
+            }
+
+            @Override
+            public void errorOccurred(Exception e) {
+                showError(e);
+            }
+        });
 
         confirmButton.addActionListener(e ->
                 handler.submitForm(dateFormInput.getText(), dateToInput.getText())
@@ -34,7 +48,7 @@ final class FetchItemsInfoFormPanel extends JPanel implements BusyAware {
     }
 
     @Override
-    public void setBusy(boolean busy) {
+    public void busyChanged(boolean busy) {
         dateFormInput.setEnabled(!busy);
         dateToInput.setEnabled(!busy);
         confirmButton.setEnabled(!busy);

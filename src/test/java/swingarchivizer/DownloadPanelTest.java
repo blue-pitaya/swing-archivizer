@@ -6,8 +6,6 @@ import javax.swing.*;
 import java.awt.Component;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -55,7 +53,7 @@ class DownloadPanelTest {
         createPanel();
 
         SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new HttpService.Item()))));
-        SwingUtilities.invokeAndWait(() -> panel.setBusy(true));
+        SwingUtilities.invokeAndWait(() -> panel.busyChanged(true));
 
         assertFalse(table().isEnabled());
         assertFalse(startButton().isEnabled());
@@ -93,27 +91,7 @@ class DownloadPanelTest {
         }
 
         @Override
-        public void setDirectoryValidationListener(Consumer<ValidationEvent> listener) {
-        }
-
-        @Override
-        public void setFetchStateListener(Consumer<DownloadPanel.FetchState> listener) {
-        }
-
-        @Override
-        public void setItemStatusListener(BiConsumer<FetchItem, FetchItem.Status> listener) {
-        }
-
-        @Override
-        public void setItemsListener(Consumer<List<FetchItem>> listener) {
-        }
-
-        @Override
-        public void setErrorListener(Consumer<Exception> listener) {
-        }
-
-        @Override
-        public void setFinishedListener(Runnable listener) {
+        public void setListener(DownloadListener listener) {
         }
     }
 }

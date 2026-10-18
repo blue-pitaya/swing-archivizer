@@ -7,7 +7,6 @@ import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,7 +18,7 @@ class FetchItemsInfoFormPanelTest {
 
         SwingUtilities.invokeAndWait(() -> {
             FetchItemsInfoFormPanel panel = new FetchItemsInfoFormPanel(new AppConfig(), new FakeHandler());
-            panel.setBusy(true);
+            panel.busyChanged(true);
             for (Component component : panel.getComponents()) {
                 enabled.add(component.isEnabled());
             }
@@ -35,15 +34,7 @@ class FetchItemsInfoFormPanelTest {
         }
 
         @Override
-        public void setFromValidationListener(Consumer<ValidationEvent> listener) {
-        }
-
-        @Override
-        public void setToValidationListener(Consumer<ValidationEvent> listener) {
-        }
-
-        @Override
-        public void setErrorListener(Consumer<Exception> listener) {
+        public void setListener(FetchItemsInfoListener listener) {
         }
     }
 }

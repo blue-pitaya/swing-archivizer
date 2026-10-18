@@ -2,23 +2,19 @@ package swingarchivizer;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.List;
-import java.util.function.Consumer;
 
 final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
 
     private final FetchService fetchService;
     private final UiBlocker uiBlocker;
-    private final Consumer<List<FetchItem>> onItemsFetched;
+    private final ItemsFetchedListener onItemsFetched;
 
-    private Consumer<ValidationEvent> fromValidationListener;
-    private Consumer<ValidationEvent> toValidationListener;
-    private Consumer<Exception> errorListener;
+    private FetchItemsInfoListener listener;
 
     FetchItemsInfoHandlerImpl(
             FetchService fetchService,
             UiBlocker uiBlocker,
-            Consumer<List<FetchItem>> onItemsFetched
+            ItemsFetchedListener onItemsFetched
     ) {
         this.fetchService = fetchService;
         this.uiBlocker = uiBlocker;
@@ -30,17 +26,17 @@ final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
         LocalDate fromDate = null;
         try {
             fromDate = LocalDate.parse(from);
-            fromValidationListener.accept(ValidationEvent.ok());
+            listener.fromValidated(ValidationEvent.ok());
         } catch (DateTimeParseException e) {
-            fromValidationListener.accept(ValidationEvent.message("Nieprawidłowa data"));
+            listener.fromValidated(ValidationEvent.message("Nieprawidłowa data"));
         }
 
         LocalDate toDate = null;
         try {
             toDate = LocalDate.parse(to);
-            toValidationListener.accept(ValidationEvent.ok());
+            listener.toValidated(ValidationEvent.ok());
         } catch (DateTimeParseException e) {
-            toValidationListener.accept(ValidationEvent.message("Nieprawidłowa data"));
+            listener.toValidated(ValidationEvent.message("Nieprawidłowa data"));
         }
 
         if (fromDate == null || toDate == null) {
@@ -48,26 +44,16 @@ final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
         }
 
         if (fromDate.isAfter(toDate)) {
-            toValidationListener.accept(ValidationEvent.message("Nieprawidłowa data"));
+            listener.toValidated(ValidationEvent.message("Nieprawidłowa data"));
             return;
         }
 
         uiBlocker.setBusy(UiBlocker.Mode.FETCH, true);
-        fetchService.fetchItems(fromDate, toDate, onItemsFetched, errorListener);
+        fetchService.fetchItems(fromDate, toDate, onItemsFetched::itemsFetched, listener::errorOccurred);
     }
 
     @Override
-    public void setFromValidationListener(Consumer<ValidationEvent> listener) {
-        fromValidationListener = listener;
-    }
-
-    @Override
-    public void setToValidationListener(Consumer<ValidationEvent> listener) {
-        toValidationListener = listener;
-    }
-
-    @Override
-    public void setErrorListener(Consumer<Exception> listener) {
-        errorListener = listener;
+    public void setListener(FetchItemsInfoListener listener) {
+        this.listener = listener;
     }
 }

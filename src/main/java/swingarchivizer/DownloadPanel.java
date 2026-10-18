@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-final class DownloadPanel extends JPanel implements BusyAware {
+final class DownloadPanel extends JPanel implements BusyListener {
 
     public enum FetchState {
         NEW("Gotowy"),
@@ -55,12 +55,37 @@ final class DownloadPanel extends JPanel implements BusyAware {
         buttonsPanel.add(stopButton);
         add(buttonsPanel, getConstraints(3));
 
-        handler.setDirectoryValidationListener(directoryInput::handleValidationEvent);
-        handler.setFetchStateListener(this::setFetchState);
-        handler.setItemStatusListener(table::setStatus);
-        handler.setItemsListener(this::setItems);
-        handler.setErrorListener(this::showError);
-        handler.setFinishedListener(this::showFinished);
+        handler.setListener(new DownloadListener() {
+            @Override
+            public void directoryValidated(ValidationEvent event) {
+                directoryInput.handleValidationEvent(event);
+            }
+
+            @Override
+            public void fetchStateChanged(FetchState fetchState) {
+                setFetchState(fetchState);
+            }
+
+            @Override
+            public void itemStatusChanged(FetchItem item, FetchItem.Status status) {
+                table.setStatus(item, status);
+            }
+
+            @Override
+            public void itemsChanged(List<FetchItem> items) {
+                setItems(items);
+            }
+
+            @Override
+            public void errorOccurred(Exception e) {
+                showError(e);
+            }
+
+            @Override
+            public void finished() {
+                showFinished();
+            }
+        });
 
         startButton.addActionListener(event -> handler.startDownload(directoryInput.getText(), table.getItems()));
         setFetchState(FetchState.NEW);
@@ -79,7 +104,7 @@ final class DownloadPanel extends JPanel implements BusyAware {
     }
 
     @Override
-    public void setBusy(boolean busy) {
+    public void busyChanged(boolean busy) {
         this.busy = busy;
         table.setEnabled(!busy);
         updateDirectoryInput();
