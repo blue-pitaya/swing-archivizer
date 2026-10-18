@@ -5,8 +5,8 @@ import java.awt.*;
 
 public final class FetchItemsInfoFormPanel extends JPanel implements BusyAware {
 
-    private final UniDateInput dateFormInput = new UniDateInput("Data początkowa");
-    private final UniDateInput dateToInput = new UniDateInput("Data końcowa");
+    private final UniTextInput dateFormInput = new UniTextInput("Data początkowa");
+    private final UniTextInput dateToInput = new UniTextInput("Data końcowa");
     private final JButton confirmButton = new JButton("Pobierz");
 
     public FetchItemsInfoFormPanel(
@@ -15,14 +15,16 @@ public final class FetchItemsInfoFormPanel extends JPanel implements BusyAware {
     ) {
         super(new GridBagLayout());
 
-        dateFormInput.getInput().setText(defaultDatesProvider.getFromDate());
+        dateFormInput.setPlaceholder("YYYY-MM-DD");
+        dateFormInput.setText(defaultDatesProvider.getFromDate());
         handler.setFromValidationListener(dateFormInput::handleValidationEvent);
 
-        dateToInput.getInput().setText(defaultDatesProvider.getToDate());
+        dateToInput.setPlaceholder("YYYY-MM-DD");
+        dateToInput.setText(defaultDatesProvider.getToDate());
         handler.setToValidationListener(dateToInput::handleValidationEvent);
 
         confirmButton.addActionListener(e ->
-                handler.submitForm(dateFormInput.getInput().getText(), dateToInput.getInput().getText())
+                handler.submitForm(dateFormInput.getText(), dateToInput.getText())
         );
 
         add(dateFormInput, getConstraints(0, 0));
