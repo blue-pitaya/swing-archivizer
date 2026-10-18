@@ -20,8 +20,10 @@ public class App {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Archivizer v1.0");
             MessageDialogHelper messageDialogHelper = new MessageDialogHelper(frame);
+            UiBlocker uiBlocker = new UiBlocker();
 
-            FetchItemsInfoFormPanel fetchItemsInfoFormPanel = getFetchItemsInfoFormPanel(config, ctx, messageDialogHelper, httpService);
+            FetchItemsInfoFormPanel fetchItemsInfoFormPanel = getFetchItemsInfoFormPanel(config, ctx, messageDialogHelper, httpService, uiBlocker);
+            uiBlocker.add(fetchItemsInfoFormPanel);
             frame.add(fetchItemsInfoFormPanel, BorderLayout.NORTH);
 
             DownloadPanel downloadPanel = new DownloadPanel();
@@ -40,18 +42,19 @@ public class App {
             AppConfig appConfig,
             AppContext ctx,
             MessageDialogHelper messageDialogHelper,
-            HttpService httpService
+            HttpService httpService,
+            UiBlocker uiBlocker
     ) {
         DefaultDatesProvider ddp = new DefaultDatesProvider() {
 
             @Override
             public String getFromDate() {
-                return null;
+                return appConfig.getDefaultFromDate().toString();
             }
 
             @Override
             public String getToDate() {
-                return null;
+                return appConfig.getDefaultToDate().toString();
             }
         };
 
@@ -86,7 +89,8 @@ public class App {
                     return;
                 }
 
-                new FetchItemsWorker(ctx, messageDialogHelper, httpService, fromDate, toDate).execute();
+                uiBlocker.setBusy(true);
+                new FetchItemsWorker(ctx, messageDialogHelper, httpService, uiBlocker, fromDate, toDate).execute();
             }
 
             @Override

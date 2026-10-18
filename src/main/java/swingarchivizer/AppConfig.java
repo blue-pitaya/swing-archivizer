@@ -9,6 +9,6 @@ final class AppConfig {
     }
 
     LocalDate getDefaultToDate() {
-        return LocalDate.of(2026, 1, 1);
+        return LocalDate.of(2026, 1, 31);
     }
 }

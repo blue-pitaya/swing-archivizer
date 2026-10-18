@@ -1,5 +1,6 @@
 package swingarchivizer.workers;
 
+import swingarchivizer.BusyAware;
 import swingarchivizer.MessageDialogHelper;
 import swingarchivizer.HttpService;
 import swingarchivizer.context.AppContext;
@@ -20,6 +21,7 @@ public final class FetchItemsWorker extends SwingWorker<List<Item>, Void> {
     private final AppContext ctx;
     private final MessageDialogHelper messageDialogHelper;
     private final HttpService httpService;
+    private final BusyAware busyAware;
     private final LocalDate from;
     private final LocalDate to;
 
@@ -27,6 +29,7 @@ public final class FetchItemsWorker extends SwingWorker<List<Item>, Void> {
             AppContext ctx,
             MessageDialogHelper messageDialogHelper,
             HttpService httpService,
+            BusyAware busyAware,
             LocalDate from,
             LocalDate to
     ) {
@@ -35,6 +38,7 @@ public final class FetchItemsWorker extends SwingWorker<List<Item>, Void> {
         this.ctx = ctx;
         this.messageDialogHelper = messageDialogHelper;
         this.httpService = httpService;
+        this.busyAware = busyAware;
         this.from = from;
         this.to = to;
     }
@@ -56,6 +60,7 @@ public final class FetchItemsWorker extends SwingWorker<List<Item>, Void> {
             messageDialogHelper.report(e);
         } finally {
             ctx.getUiBusy().setValue(false);
+            busyAware.setBusy(false);
         }
     }
 }
