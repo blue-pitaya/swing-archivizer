@@ -13,7 +13,7 @@ final class AppFrame extends JFrame {
     ) {
         super(config.getTitle());
 
-        DownloadPanel downloadPanel = new DownloadPanel(downloadHandler);
+        DownloadPanel downloadPanel = new DownloadPanel(config, downloadHandler);
         uiBlocker.add(downloadPanel, UiBlocker.Mode.FETCH);
         add(downloadPanel, BorderLayout.CENTER);
 

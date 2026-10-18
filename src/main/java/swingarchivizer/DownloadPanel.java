@@ -2,7 +2,6 @@ package swingarchivizer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.nio.file.Paths;
 import java.util.List;
 
 final class DownloadPanel extends JPanel implements BusyAware {
@@ -34,7 +33,10 @@ final class DownloadPanel extends JPanel implements BusyAware {
     private boolean busy;
     private FetchState fetchState;
 
-    public DownloadPanel(DownloadHandler handler) {
+    public DownloadPanel(
+            AppConfig config,
+            DownloadHandler handler
+    ) {
         super(new GridBagLayout());
 
         GridBagConstraints tableGridBagConstraints = getConstraints(0);
@@ -43,7 +45,7 @@ final class DownloadPanel extends JPanel implements BusyAware {
         tableGridBagConstraints.weighty = 1;
         add(new JScrollPane(table), tableGridBagConstraints);
 
-        directoryInput.setPath(Paths.get(System.getProperty("user.dir"), "download"));
+        directoryInput.setPath(config.getDefaultDownloadDir());
         add(directoryInput, getConstraints(1));
 
         add(statusLabel, getConstraints(2));

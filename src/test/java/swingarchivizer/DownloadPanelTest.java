@@ -64,7 +64,7 @@ class DownloadPanelTest {
     }
 
     private void createPanel() throws Exception {
-        SwingUtilities.invokeAndWait(() -> panel = new DownloadPanel(new FakeHandler()));
+        SwingUtilities.invokeAndWait(() -> panel = new DownloadPanel(new AppConfig(), new FakeHandler()));
     }
 
     private JTable table() {
