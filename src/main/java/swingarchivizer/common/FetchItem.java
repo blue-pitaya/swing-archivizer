@@ -1,4 +1,4 @@
-package swingarchivizer;
+package swingarchivizer.common;
 
 public final class FetchItem {
     public enum Status {
@@ -14,11 +14,15 @@ public final class FetchItem {
         }
     }
 
-    public HttpService.Item value;
+    public int id;
+    public String code;
+    public String date;
     public Status status;
 
-    public FetchItem(HttpService.Item value) {
-        this.value = value;
+    public FetchItem(int id, String code, String date) {
+        this.id = id;
+        this.code = code;
+        this.date = date;
         this.status = Status.QUEUED;
     }
 }

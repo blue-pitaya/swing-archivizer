@@ -1,9 +1,9 @@
 package swingarchivizer.fetchitemsinfo;
 
-import swingarchivizer.AppConfig;
-import swingarchivizer.BusyListener;
-import swingarchivizer.UniTextInput;
-import swingarchivizer.ValidationEvent;
+import swingarchivizer.common.AppConfig;
+import swingarchivizer.common.BusyListener;
+import swingarchivizer.common.UniTextInput;
+import swingarchivizer.common.ValidationEvent;
 
 import javax.swing.*;
 import java.awt.*;

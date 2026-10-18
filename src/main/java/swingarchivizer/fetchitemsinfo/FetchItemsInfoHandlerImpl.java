@@ -1,25 +1,27 @@
 package swingarchivizer.fetchitemsinfo;
 
-import swingarchivizer.FetchService;
-import swingarchivizer.ItemsFetchedListener;
-import swingarchivizer.UiBlocker;
-import swingarchivizer.ValidationEvent;
+import swingarchivizer.common.FetchItem;
+import swingarchivizer.common.FetchService;
+import swingarchivizer.common.UiBlocker;
+import swingarchivizer.common.ValidationEvent;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.function.Consumer;
 
 public final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
 
     private final FetchService fetchService;
     private final UiBlocker uiBlocker;
-    private final ItemsFetchedListener onItemsFetched;
+    private final Consumer<List<FetchItem>> onItemsFetched;
 
     private FetchItemsInfoListener listener;
 
     public FetchItemsInfoHandlerImpl(
             FetchService fetchService,
             UiBlocker uiBlocker,
-            ItemsFetchedListener onItemsFetched
+            Consumer<List<FetchItem>> onItemsFetched
     ) {
         this.fetchService = fetchService;
         this.uiBlocker = uiBlocker;
@@ -54,7 +56,7 @@ public final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
         }
 
         uiBlocker.setBusy(UiBlocker.Mode.FETCH, true);
-        fetchService.fetchItems(fromDate, toDate, onItemsFetched::itemsFetched, listener::errorOccurred);
+        fetchService.fetchItems(fromDate, toDate, onItemsFetched, listener::errorOccurred);
     }
 
     @Override

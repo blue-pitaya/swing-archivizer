@@ -1,4 +1,4 @@
-package swingarchivizer;
+package swingarchivizer.common;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -72,7 +72,7 @@ public class UniTextInput extends JPanel {
         placeholder = v;
     }
 
-    void setValidationMessage(String v) {
+    protected void setValidationMessage(String v) {
         if (v == null || v.isEmpty()) {
             clearValidationMessage();
         }
@@ -80,7 +80,7 @@ public class UniTextInput extends JPanel {
         field.setBorder(errorBorder);
     }
 
-    void clearValidationMessage() {
+    protected void clearValidationMessage() {
         validationMessage.setText(EMPTY_VALIDATION_MESSAGE);
         field.setBorder(defaultBorder);
     }

@@ -1,6 +1,6 @@
 package swingarchivizer.download;
 
-import swingarchivizer.FetchItem;
+import swingarchivizer.common.FetchItem;
 
 import java.util.List;
 

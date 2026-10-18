@@ -1,4 +1,4 @@
-package swingarchivizer;
+package swingarchivizer.common;
 
 import java.util.Collections;
 import java.util.EnumSet;
@@ -16,7 +16,7 @@ public final class UiBlocker {
     private final Map<BusyListener, Set<Mode>> panels = new LinkedHashMap<>();
     private final Set<Mode> activeModes = EnumSet.noneOf(Mode.class);
 
-    void add(BusyListener panel, Mode... modes) {
+    public void add(BusyListener panel, Mode... modes) {
         Set<Mode> panelModes = EnumSet.noneOf(Mode.class);
         Collections.addAll(panelModes, modes);
         panels.put(panel, panelModes);

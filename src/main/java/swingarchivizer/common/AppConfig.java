@@ -1,4 +1,4 @@
-package swingarchivizer;
+package swingarchivizer.common;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public final class AppConfig {
 
-    String getTitle() {
+    public String getTitle() {
         return "Archivizer v1.0";
     }
 

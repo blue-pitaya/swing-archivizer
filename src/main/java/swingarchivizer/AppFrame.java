@@ -1,5 +1,7 @@
 package swingarchivizer;
 
+import swingarchivizer.common.AppConfig;
+import swingarchivizer.common.UiBlocker;
 import swingarchivizer.download.DownloadHandler;
 import swingarchivizer.download.DownloadPanel;
 import swingarchivizer.fetchitemsinfo.FetchItemsInfoPanel;

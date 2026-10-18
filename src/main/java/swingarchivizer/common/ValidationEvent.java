@@ -1,4 +1,4 @@
-package swingarchivizer;
+package swingarchivizer.common;
 
 public final class ValidationEvent {
 

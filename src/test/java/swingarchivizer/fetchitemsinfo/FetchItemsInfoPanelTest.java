@@ -2,7 +2,7 @@ package swingarchivizer.fetchitemsinfo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import swingarchivizer.AppConfig;
+import swingarchivizer.common.AppConfig;
 
 import javax.swing.SwingUtilities;
 import java.awt.Component;

@@ -1,9 +1,8 @@
 package swingarchivizer.download;
 
 import org.junit.jupiter.api.Test;
-import swingarchivizer.AppConfig;
-import swingarchivizer.FetchItem;
-import swingarchivizer.HttpService;
+import swingarchivizer.common.AppConfig;
+import swingarchivizer.common.FetchItem;
 
 import javax.swing.*;
 import java.awt.Component;
@@ -31,7 +30,7 @@ class DownloadPanelTest {
     void showsLoadedItemsAndEnablesStart() throws Exception {
         createPanel();
 
-        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new HttpService.Item()))));
+        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(1, "ABC", "2026-01-01"))));
 
         assertEquals(1, table().getRowCount());
         assertTrue(startButton().isEnabled());
@@ -43,7 +42,7 @@ class DownloadPanelTest {
     void runningDownloadEnablesStopAndLocksDirectory() throws Exception {
         createPanel();
 
-        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new HttpService.Item()))));
+        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(1, "ABC", "2026-01-01"))));
         SwingUtilities.invokeAndWait(() -> panel.setFetchState(DownloadPanel.FetchState.RUNNING));
 
         assertFalse(startButton().isEnabled());
@@ -55,7 +54,7 @@ class DownloadPanelTest {
     void busyDisablesTableAndButtons() throws Exception {
         createPanel();
 
-        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new HttpService.Item()))));
+        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(1, "ABC", "2026-01-01"))));
         SwingUtilities.invokeAndWait(() -> panel.busyChanged(true));
 
         assertFalse(table().isEnabled());

@@ -1,4 +1,4 @@
-package swingarchivizer;
+package swingarchivizer.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
@@ -9,10 +9,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class HttpService {
 
-    public static final class Item {
+    private static final class Item {
         public int id;
         public String code;
         public String date;
@@ -45,7 +48,7 @@ public final class HttpService {
     public HttpService() {
     }
 
-    public Item[] postItemsIds(LocalDate from, LocalDate to) throws IOException {
+    public List<FetchItem> postItemsIds(LocalDate from, LocalDate to) throws IOException {
         Request request = new Request.Builder()
                 .url("http://127.0.0.1:8069/items")
                 .post(RequestBody.create(mapper.writeValueAsString(new ItemIdsRequest(from, to)), JSON))
@@ -56,7 +59,9 @@ public final class HttpService {
                 throw new IOException("HTTP " + response.code() + ": " + body);
             }
 
-            return mapper.readValue(body, Item[].class);
+            return Arrays.stream(mapper.readValue(body, Item[].class))
+                    .map(item -> new FetchItem(item.id, item.code, item.date))
+                    .collect(Collectors.toList());
         }
     }
 

@@ -1,9 +1,9 @@
 package swingarchivizer.download;
 
-import swingarchivizer.FetchItem;
-import swingarchivizer.FetchService;
-import swingarchivizer.UiBlocker;
-import swingarchivizer.ValidationEvent;
+import swingarchivizer.common.FetchItem;
+import swingarchivizer.common.FetchService;
+import swingarchivizer.common.UiBlocker;
+import swingarchivizer.common.ValidationEvent;
 
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;

@@ -1,14 +1,12 @@
-package swingarchivizer;
+package swingarchivizer.common;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public final class FetchService {
 
@@ -24,19 +22,16 @@ public final class FetchService {
     }
 
     public void fetchItems(LocalDate from, LocalDate to, Consumer<List<FetchItem>> onFetched, Consumer<Exception> onError) {
-        new SwingWorker<List<HttpService.Item>, Void>() {
+        new SwingWorker<List<FetchItem>, Void>() {
             @Override
-            protected List<HttpService.Item> doInBackground() throws IOException {
-                return Arrays.asList(httpService.postItemsIds(from, to));
+            protected List<FetchItem> doInBackground() throws IOException {
+                return httpService.postItemsIds(from, to);
             }
 
             @Override
             protected void done() {
                 try {
-                    List<FetchItem> items = get().stream()
-                            .map(FetchItem::new)
-                            .collect(Collectors.toList());
-                    onFetched.accept(items);
+                    onFetched.accept(get());
                 } catch (InterruptedException | ExecutionException e) {
                     onError.accept(e);
                 } finally {
@@ -50,7 +45,7 @@ public final class FetchService {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws IOException {
-                httpService.fetchItem(item.value.id, downloadDir);
+                httpService.fetchItem(item.id, downloadDir);
                 return null;
             }
 

@@ -1,4 +1,6 @@
-package swingarchivizer;
+package swingarchivizer.download;
+
+import swingarchivizer.common.FetchItem;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -7,11 +9,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FetchItemsTable extends JTable {
+final class FetchItemsTable extends JTable {
 
     private final Model tableModel = new Model();
 
-    public FetchItemsTable() {
+    FetchItemsTable() {
         setModel(tableModel);
 
         setPreferredScrollableViewportSize(new Dimension(400, 200));
@@ -25,15 +27,15 @@ public final class FetchItemsTable extends JTable {
         });
     }
 
-    public void setItems(List<FetchItem> items) {
+    void setItems(List<FetchItem> items) {
         tableModel.setItems(items);
     }
 
-    public List<FetchItem> getItems() {
+    List<FetchItem> getItems() {
         return tableModel.items;
     }
 
-    public void setStatus(FetchItem item, FetchItem.Status status) {
+    void setStatus(FetchItem item, FetchItem.Status status) {
         item.status = status;
         int row = tableModel.items.indexOf(item);
         tableModel.fireTableRowsUpdated(row, row);
@@ -69,11 +71,11 @@ public final class FetchItemsTable extends JTable {
             FetchItem item = items.get(row);
             switch (column) {
                 case 0:
-                    return item.value.id;
+                    return item.id;
                 case 1:
-                    return item.value.code;
+                    return item.code;
                 case 2:
-                    return item.value.date;
+                    return item.date;
                 case 3:
                     return item.status.label;
                 default:

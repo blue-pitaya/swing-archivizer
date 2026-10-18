@@ -1,11 +1,11 @@
 package swingarchivizer.download;
 
-import swingarchivizer.FetchItem;
-import swingarchivizer.ValidationEvent;
+import swingarchivizer.common.FetchItem;
+import swingarchivizer.common.ValidationEvent;
 
 import java.util.List;
 
-interface DownloadListener {
+public interface DownloadListener {
 
     void directoryValidated(ValidationEvent event);
 

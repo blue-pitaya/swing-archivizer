@@ -1,4 +1,6 @@
-package swingarchivizer;
+package swingarchivizer.download;
+
+import swingarchivizer.common.UniTextInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public final class UniDirectoryInput extends UniTextInput {
+final class UniDirectoryInput extends UniTextInput {
     private final JButton browseButton = new JButton("Wybierz");
 
     public UniDirectoryInput(String labelText) {

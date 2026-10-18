@@ -1,8 +1,8 @@
 package swingarchivizer.fetchitemsinfo;
 
-import swingarchivizer.ValidationEvent;
+import swingarchivizer.common.ValidationEvent;
 
-interface FetchItemsInfoListener {
+public interface FetchItemsInfoListener {
 
     void fromValidated(ValidationEvent event);
 
