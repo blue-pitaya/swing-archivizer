@@ -1,12 +1,12 @@
 package swingarchivizer;
 
-import swingarchivizer.common.AppConfig;
-import swingarchivizer.common.FetchService;
-import swingarchivizer.common.HttpService;
-import swingarchivizer.common.UiBlocker;
+import swingarchivizer.download.DownloadHandler;
 import swingarchivizer.download.DownloadHandlerImpl;
 import swingarchivizer.fetchitemsinfo.FetchItemsInfoHandler;
 import swingarchivizer.fetchitemsinfo.FetchItemsInfoHandlerImpl;
+import swingarchivizer.service.FetchService;
+import swingarchivizer.service.HttpService;
+import swingarchivizer.ui.UiBlocker;
 
 import javax.swing.*;
 
@@ -16,8 +16,8 @@ class App {
         AppConfig config = new AppConfig();
         UiBlocker uiBlocker = new UiBlocker();
         FetchService fetchService = new FetchService(httpService, uiBlocker);
-        DownloadHandlerImpl downloadHandler = new DownloadHandlerImpl(fetchService, uiBlocker);
-        FetchItemsInfoHandler fetchItemsInfoHandler = new FetchItemsInfoHandlerImpl(fetchService, uiBlocker, downloadHandler::showItems);
+        DownloadHandler downloadHandler = new DownloadHandlerImpl(fetchService, uiBlocker);
+        FetchItemsInfoHandler fetchItemsInfoHandler = new FetchItemsInfoHandlerImpl(fetchService, uiBlocker, downloadHandler::loadItems);
 
         SwingUtilities.invokeLater(() -> {
             AppFrame frame = new AppFrame(

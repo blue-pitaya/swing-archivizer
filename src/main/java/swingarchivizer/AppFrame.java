@@ -1,11 +1,10 @@
 package swingarchivizer;
 
-import swingarchivizer.common.AppConfig;
-import swingarchivizer.common.UiBlocker;
 import swingarchivizer.download.DownloadHandler;
 import swingarchivizer.download.DownloadPanel;
 import swingarchivizer.fetchitemsinfo.FetchItemsInfoPanel;
 import swingarchivizer.fetchitemsinfo.FetchItemsInfoHandler;
+import swingarchivizer.ui.UiBlocker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,11 +19,11 @@ final class AppFrame extends JFrame {
     ) {
         super(config.getTitle());
 
-        DownloadPanel downloadPanel = new DownloadPanel(config, downloadHandler);
+        DownloadPanel downloadPanel = new DownloadPanel(config.getDefaultDownloadDir(), downloadHandler);
         uiBlocker.add(downloadPanel, UiBlocker.Mode.FETCH);
         add(downloadPanel, BorderLayout.CENTER);
 
-        FetchItemsInfoPanel fetchItemsInfoPanel = new FetchItemsInfoPanel(config, fetchItemsInfoHandler);
+        FetchItemsInfoPanel fetchItemsInfoPanel = new FetchItemsInfoPanel(config.getDefaultFromDate(), config.getDefaultToDate(), fetchItemsInfoHandler);
         uiBlocker.add(fetchItemsInfoPanel, UiBlocker.Mode.FETCH, UiBlocker.Mode.DOWNLOAD);
         add(fetchItemsInfoPanel, BorderLayout.NORTH);
 

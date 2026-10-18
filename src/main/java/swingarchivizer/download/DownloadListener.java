@@ -1,7 +1,7 @@
 package swingarchivizer.download;
 
-import swingarchivizer.common.FetchItem;
-import swingarchivizer.common.ValidationEvent;
+import swingarchivizer.service.FetchItem;
+import swingarchivizer.ui.ValidationEvent;
 
 import java.util.List;
 

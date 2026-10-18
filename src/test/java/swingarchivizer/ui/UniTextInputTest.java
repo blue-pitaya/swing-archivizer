@@ -1,4 +1,4 @@
-package swingarchivizer.common;
+package swingarchivizer.ui;
 
 import org.junit.jupiter.api.Test;
 

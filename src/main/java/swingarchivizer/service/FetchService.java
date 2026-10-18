@@ -1,4 +1,6 @@
-package swingarchivizer.common;
+package swingarchivizer.service;
+
+import swingarchivizer.ui.UiBlocker;
 
 import javax.swing.*;
 import java.io.IOException;

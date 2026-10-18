@@ -1,6 +1,6 @@
 package swingarchivizer.download;
 
-import swingarchivizer.common.FetchItem;
+import swingarchivizer.service.FetchItem;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -9,11 +9,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-final class FetchItemsTable extends JTable {
+final class DownloadQueueTable extends JTable {
 
     private final Model tableModel = new Model();
 
-    FetchItemsTable() {
+    DownloadQueueTable() {
         setModel(tableModel);
 
         setPreferredScrollableViewportSize(new Dimension(400, 200));
@@ -77,9 +77,24 @@ final class FetchItemsTable extends JTable {
                 case 2:
                     return item.date;
                 case 3:
-                    return item.status.label;
+                    return getStatusLabel(item.status);
                 default:
                     throw new IllegalArgumentException("Unknown column " + column);
+            }
+        }
+
+        private static String getStatusLabel(FetchItem.Status status) {
+            switch (status) {
+                case QUEUED:
+                    return "W kolejce";
+                case DOWNLOADING:
+                    return "Pobieranie...";
+                case DONE:
+                    return "Zakończono";
+                case ERROR:
+                    return "Błąd";
+                default:
+                    throw new IllegalArgumentException("Unknown status " + status);
             }
         }
     }

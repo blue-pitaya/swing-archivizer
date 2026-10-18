@@ -1,4 +1,4 @@
-package swingarchivizer.common;
+package swingarchivizer.ui;
 
 import javax.swing.*;
 import javax.swing.border.Border;

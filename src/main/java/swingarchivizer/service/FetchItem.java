@@ -1,17 +1,11 @@
-package swingarchivizer.common;
+package swingarchivizer.service;
 
 public final class FetchItem {
     public enum Status {
-        QUEUED("W kolejce"),
-        DOWNLOADING("Pobieranie..."),
-        DONE("Zakończono"),
-        ERROR("Błąd");
-
-        public final String label;
-
-        Status(String label) {
-            this.label = label;
-        }
+        QUEUED,
+        DOWNLOADING,
+        DONE,
+        ERROR
     }
 
     public int id;

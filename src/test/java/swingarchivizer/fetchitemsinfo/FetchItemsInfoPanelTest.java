@@ -2,10 +2,9 @@ package swingarchivizer.fetchitemsinfo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import swingarchivizer.common.AppConfig;
-
 import javax.swing.SwingUtilities;
 import java.awt.Component;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ class FetchItemsInfoPanelTest {
         List<Boolean> enabled = new ArrayList<>();
 
         SwingUtilities.invokeAndWait(() -> {
-            FetchItemsInfoPanel panel = new FetchItemsInfoPanel(new AppConfig(), new FakeHandler());
+            FetchItemsInfoPanel panel = new FetchItemsInfoPanel(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 1, 31), new FakeHandler());
             panel.busyChanged(true);
             for (Component component : panel.getComponents()) {
                 enabled.add(component.isEnabled());

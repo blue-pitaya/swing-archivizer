@@ -1,11 +1,11 @@
 package swingarchivizer.download;
 
 import org.junit.jupiter.api.Test;
-import swingarchivizer.common.AppConfig;
-import swingarchivizer.common.FetchItem;
+import swingarchivizer.service.FetchItem;
 
 import javax.swing.*;
 import java.awt.Component;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,7 +64,7 @@ class DownloadPanelTest {
     }
 
     private void createPanel() throws Exception {
-        SwingUtilities.invokeAndWait(() -> panel = new DownloadPanel(new AppConfig(), new FakeHandler()));
+        SwingUtilities.invokeAndWait(() -> panel = new DownloadPanel(Paths.get("download"), new FakeHandler()));
     }
 
     private JTable table() {
@@ -90,6 +90,10 @@ class DownloadPanelTest {
     private static final class FakeHandler implements DownloadHandler {
         @Override
         public void startDownload(String directory, List<FetchItem> items) {
+        }
+
+        @Override
+        public void loadItems(List<FetchItem> items) {
         }
 
         @Override

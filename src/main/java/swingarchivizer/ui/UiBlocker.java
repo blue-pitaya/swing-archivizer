@@ -1,4 +1,4 @@
-package swingarchivizer.common;
+package swingarchivizer.ui;
 
 import java.util.Collections;
 import java.util.EnumSet;

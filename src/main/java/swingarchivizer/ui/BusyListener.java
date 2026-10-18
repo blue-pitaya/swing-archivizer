@@ -1,4 +1,4 @@
-package swingarchivizer.common;
+package swingarchivizer.ui;
 
 public interface BusyListener {
 

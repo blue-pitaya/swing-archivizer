@@ -1,4 +1,4 @@
-package swingarchivizer.common;
+package swingarchivizer.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;

@@ -1,12 +1,13 @@
 package swingarchivizer.download;
 
-import swingarchivizer.common.AppConfig;
-import swingarchivizer.common.BusyListener;
-import swingarchivizer.common.FetchItem;
-import swingarchivizer.common.ValidationEvent;
+import swingarchivizer.service.FetchItem;
+import swingarchivizer.ui.BusyListener;
+import swingarchivizer.ui.UniDirectoryInput;
+import swingarchivizer.ui.ValidationEvent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.file.Path;
 import java.util.List;
 
 public final class DownloadPanel extends JPanel implements BusyListener {
@@ -29,7 +30,7 @@ public final class DownloadPanel extends JPanel implements BusyListener {
         }
     }
 
-    private final FetchItemsTable table = new FetchItemsTable();
+    private final DownloadQueueTable table = new DownloadQueueTable();
     private final UniDirectoryInput directoryInput = new UniDirectoryInput("Katalog docelowy");
     private final JLabel statusLabel = new JLabel();
     private final JButton startButton = new JButton("Rozpocznij");
@@ -39,7 +40,7 @@ public final class DownloadPanel extends JPanel implements BusyListener {
     private FetchState fetchState;
 
     public DownloadPanel(
-            AppConfig config,
+            Path defaultDownloadDir,
             DownloadHandler handler
     ) {
         super(new GridBagLayout());
@@ -50,7 +51,7 @@ public final class DownloadPanel extends JPanel implements BusyListener {
         tableGridBagConstraints.weighty = 1;
         add(new JScrollPane(table), tableGridBagConstraints);
 
-        directoryInput.setPath(config.getDefaultDownloadDir());
+        directoryInput.setPath(defaultDownloadDir);
         add(directoryInput, getConstraints(1));
 
         add(statusLabel, getConstraints(2));

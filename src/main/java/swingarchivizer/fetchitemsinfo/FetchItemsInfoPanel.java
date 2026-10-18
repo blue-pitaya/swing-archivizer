@@ -1,12 +1,12 @@
 package swingarchivizer.fetchitemsinfo;
 
-import swingarchivizer.common.AppConfig;
-import swingarchivizer.common.BusyListener;
-import swingarchivizer.common.UniTextInput;
-import swingarchivizer.common.ValidationEvent;
+import swingarchivizer.ui.BusyListener;
+import swingarchivizer.ui.UniTextInput;
+import swingarchivizer.ui.ValidationEvent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 
 public final class FetchItemsInfoPanel extends JPanel implements BusyListener {
 
@@ -15,16 +15,17 @@ public final class FetchItemsInfoPanel extends JPanel implements BusyListener {
     private final JButton confirmButton = new JButton("Pobierz");
 
     public FetchItemsInfoPanel(
-            AppConfig config,
+            LocalDate defaultFromDate,
+            LocalDate defaultToDate,
             FetchItemsInfoHandler handler
     ) {
         super(new GridBagLayout());
 
         dateFormInput.setPlaceholder("YYYY-MM-DD");
-        dateFormInput.setText(config.getDefaultFromDate().toString());
+        dateFormInput.setText(defaultFromDate.toString());
 
         dateToInput.setPlaceholder("YYYY-MM-DD");
-        dateToInput.setText(config.getDefaultToDate().toString());
+        dateToInput.setText(defaultToDate.toString());
 
         handler.setListener(new FetchItemsInfoListener() {
             @Override

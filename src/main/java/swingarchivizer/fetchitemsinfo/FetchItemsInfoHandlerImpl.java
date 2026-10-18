@@ -1,9 +1,9 @@
 package swingarchivizer.fetchitemsinfo;
 
-import swingarchivizer.common.FetchItem;
-import swingarchivizer.common.FetchService;
-import swingarchivizer.common.UiBlocker;
-import swingarchivizer.common.ValidationEvent;
+import swingarchivizer.service.FetchItem;
+import swingarchivizer.service.FetchService;
+import swingarchivizer.ui.UiBlocker;
+import swingarchivizer.ui.ValidationEvent;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
