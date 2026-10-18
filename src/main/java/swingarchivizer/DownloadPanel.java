@@ -5,7 +5,7 @@ import java.awt.*;
 import java.nio.file.Paths;
 import java.util.List;
 
-public final class DownloadPanel extends JPanel implements BusyAware {
+final class DownloadPanel extends JPanel implements BusyAware {
 
     public enum FetchState {
         NEW("Gotowy"),

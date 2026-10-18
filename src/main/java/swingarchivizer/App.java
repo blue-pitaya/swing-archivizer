@@ -2,7 +2,7 @@ package swingarchivizer;
 
 import javax.swing.*;
 
-public class App {
+class App {
     public static void main(String[] args) {
         HttpService httpService = new HttpService();
         AppConfig config = new AppConfig();

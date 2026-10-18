@@ -1,6 +1,6 @@
 package swingarchivizer;
 
-public final class ValidationEvent {
+final class ValidationEvent {
 
     private static final ValidationEvent OK = new ValidationEvent(null);
 

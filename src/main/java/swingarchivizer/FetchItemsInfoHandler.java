@@ -2,7 +2,7 @@ package swingarchivizer;
 
 import java.util.function.Consumer;
 
-public interface FetchItemsInfoHandler {
+interface FetchItemsInfoHandler {
 
     void submitForm(String from, String to);
 

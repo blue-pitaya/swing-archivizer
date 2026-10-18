@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
-public class UniTextInput extends JPanel {
+class UniTextInput extends JPanel {
     private static final int GAP = 4;
     private static final int VALIDATION_GAP = 0;
     private static final String EMPTY_VALIDATION_MESSAGE = " ";

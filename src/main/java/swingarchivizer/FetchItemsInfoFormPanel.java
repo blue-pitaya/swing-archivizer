@@ -3,7 +3,7 @@ package swingarchivizer;
 import javax.swing.*;
 import java.awt.*;
 
-public final class FetchItemsInfoFormPanel extends JPanel implements BusyAware {
+final class FetchItemsInfoFormPanel extends JPanel implements BusyAware {
 
     private final UniTextInput dateFormInput = new UniTextInput("Data początkowa");
     private final UniTextInput dateToInput = new UniTextInput("Data końcowa");

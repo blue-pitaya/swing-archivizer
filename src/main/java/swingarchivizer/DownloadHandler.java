@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public interface DownloadHandler {
+interface DownloadHandler {
 
     void startDownload(String directory, List<FetchItem> items);
 

@@ -1,6 +1,6 @@
 package swingarchivizer;
 
-public interface BusyAware {
+interface BusyAware {
 
     void setBusy(boolean busy);
 }
