@@ -1,10 +1,5 @@
 package swingarchivizer;
 
-import swingarchivizer.components.UniDirectoryInput;
-import swingarchivizer.context.AppContext;
-import swingarchivizer.context.FetchItem;
-import swingarchivizer.context.FetchState;
-
 import javax.swing.*;
 import java.awt.*;
 import java.nio.file.Path;
@@ -15,7 +10,24 @@ import java.util.Optional;
 
 public final class DownloadPanel extends JPanel implements BusyAware {
 
-    private final AppContext ctx;
+    public enum FetchState {
+        NEW("Gotowy"),
+        RUNNING("Pobieranie w trakcie..."),
+        STOPPED("Zatrzymano pobieranie"),
+        FINISHED("Zakończono");
+
+        private final String label;
+
+        FetchState(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
+
     private final MessageDialogHelper messageDialogHelper;
     private final FetchService fetchService;
 
@@ -26,15 +38,14 @@ public final class DownloadPanel extends JPanel implements BusyAware {
     private final JButton stopButton = new JButton("Zatrzymaj");
 
     private boolean busy;
+    private FetchState fetchState;
 
     public DownloadPanel(
-            AppContext ctx,
             MessageDialogHelper messageDialogHelper,
             FetchService fetchService
     ) {
         super(new GridBagLayout());
 
-        this.ctx = ctx;
         this.messageDialogHelper = messageDialogHelper;
         this.fetchService = fetchService;
 
@@ -55,15 +66,18 @@ public final class DownloadPanel extends JPanel implements BusyAware {
         add(buttonsPanel, getConstraints(3));
 
         startButton.addActionListener(event -> start());
-        ctx.getFetchState().subscribeAndCall(fetchState -> {
-            statusLabel.setText(fetchState.toString());
-            updateDirectoryInput();
-            updateButtons();
-        });
+        setFetchState(FetchState.NEW);
     }
 
     public void setItems(List<FetchItem> items) {
         table.setItems(items);
+        updateButtons();
+    }
+
+    public void setFetchState(FetchState fetchState) {
+        this.fetchState = fetchState;
+        statusLabel.setText(fetchState.toString());
+        updateDirectoryInput();
         updateButtons();
     }
 
@@ -81,7 +95,7 @@ public final class DownloadPanel extends JPanel implements BusyAware {
             return;
         }
 
-        ctx.getFetchState().setValue(FetchState.RUNNING);
+        setFetchState(FetchState.RUNNING);
         Path downloadDir = path.get();
         List<FetchItem> items = table.getItems();
         downloadNext(items.iterator(), downloadDir);
@@ -89,18 +103,21 @@ public final class DownloadPanel extends JPanel implements BusyAware {
 
     private void downloadNext(Iterator<FetchItem> items, Path downloadDir) {
         if (!items.hasNext()) {
-            ctx.getFetchState().setValue(FetchState.FINISHED);
+            setFetchState(FetchState.FINISHED);
             messageDialogHelper.success("Zakończono pobieranie");
             return;
         }
 
         FetchItem item = items.next();
-        item.status.setValue(FetchItem.Status.DOWNLOADING);
-        fetchService.downloadItem(item, downloadDir, () -> downloadNext(items, downloadDir));
+        table.setStatus(item, FetchItem.Status.DOWNLOADING);
+        fetchService.downloadItem(item, downloadDir, status -> {
+            table.setStatus(item, status);
+            downloadNext(items, downloadDir);
+        });
     }
 
     private void updateDirectoryInput() {
-        directoryInput.setEnabled(!busy &&ctx.getFetchState().getValue() != FetchState.RUNNING);
+        directoryInput.setEnabled(!busy && fetchState != FetchState.RUNNING);
     }
 
     private void updateButtons() {
@@ -111,9 +128,9 @@ public final class DownloadPanel extends JPanel implements BusyAware {
         }
 
         boolean anyItems = !table.getItems().isEmpty();
-        boolean finished = ctx.getFetchState().getValue() == FetchState.FINISHED;
-        startButton.setEnabled(anyItems && !finished && ctx.getFetchState().getValue() != FetchState.RUNNING);
-        stopButton.setEnabled(anyItems && !finished && ctx.getFetchState().getValue() != FetchState.NEW);
+        boolean finished = fetchState == FetchState.FINISHED;
+        startButton.setEnabled(anyItems && !finished && fetchState != FetchState.RUNNING);
+        stopButton.setEnabled(anyItems && !finished && fetchState != FetchState.NEW);
     }
 
     private static GridBagConstraints getConstraints(int y) {

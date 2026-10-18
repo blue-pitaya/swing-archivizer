@@ -1,6 +1,4 @@
-package swingarchivizer.components;
-
-import swingarchivizer.ValidationEvent;
+package swingarchivizer;
 
 import javax.swing.*;
 import java.awt.*;

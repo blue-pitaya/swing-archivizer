@@ -1,14 +1,11 @@
 package swingarchivizer;
 
-import swingarchivizer.context.FetchItem;
-
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 final class FetchItemsTable extends JTable {
 
@@ -36,25 +33,19 @@ final class FetchItemsTable extends JTable {
         return tableModel.items;
     }
 
+    void setStatus(FetchItem item, FetchItem.Status status) {
+        item.status = status;
+        int row = tableModel.items.indexOf(item);
+        tableModel.fireTableRowsUpdated(row, row);
+    }
+
     private static final class Model extends AbstractTableModel {
         private static final String[] COLUMNS = {"ID", "Kod", "Data", "Status"};
 
         private List<FetchItem> items = new ArrayList<>();
-        private final List<Consumer<FetchItem.Status>> statusListeners = new ArrayList<>();
 
         void setItems(List<FetchItem> items) {
-            for (int row = 0; row < this.items.size(); row++) {
-                this.items.get(row).status.unsubscribe(statusListeners.get(row));
-            }
-            statusListeners.clear();
-
             this.items = items;
-            for (int row = 0; row < items.size(); row++) {
-                int statusRow = row;
-                Consumer<FetchItem.Status> listener = status -> fireTableRowsUpdated(statusRow, statusRow);
-                items.get(row).status.subscribe(listener);
-                statusListeners.add(listener);
-            }
             fireTableDataChanged();
         }
 
@@ -84,7 +75,7 @@ final class FetchItemsTable extends JTable {
                 case 2:
                     return item.value.date;
                 case 3:
-                    return item.status.getValue().label;
+                    return item.status.label;
                 default:
                     throw new IllegalArgumentException("Unknown column " + column);
             }

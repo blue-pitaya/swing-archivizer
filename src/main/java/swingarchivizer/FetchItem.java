@@ -1,7 +1,4 @@
-package swingarchivizer.context;
-
-import swingarchivizer.dto.Item;
-import swingarchivizer.util.Observable;
+package swingarchivizer;
 
 public final class FetchItem {
     public enum Status {
@@ -17,11 +14,11 @@ public final class FetchItem {
         }
     }
 
-    public Item value;
-    public Observable<Status> status;
+    public HttpService.Item value;
+    public Status status;
 
-    public FetchItem(Item value) {
+    public FetchItem(HttpService.Item value) {
         this.value = value;
-        this.status = new Observable<>(Status.QUEUED);
+        this.status = Status.QUEUED;
     }
 }

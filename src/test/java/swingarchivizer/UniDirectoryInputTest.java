@@ -1,4 +1,4 @@
-package swingarchivizer.components;
+package swingarchivizer;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

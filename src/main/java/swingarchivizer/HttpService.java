@@ -2,8 +2,6 @@ package swingarchivizer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
-import swingarchivizer.dto.Item;
-import swingarchivizer.dto.ItemIdsRequest;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,6 +11,31 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 
 public final class HttpService {
+
+    public static final class Item {
+        public int id;
+        public String code;
+        public String date;
+    }
+
+    private static final class ItemIdsRequest {
+
+        private final LocalDate from;
+        private final LocalDate to;
+
+        ItemIdsRequest(LocalDate from, LocalDate to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        public String getFrom() {
+            return from.toString();
+        }
+
+        public String getTo() {
+            return to.toString();
+        }
+    }
 
     private static final MediaType JSON = MediaType.get("application/json");
 

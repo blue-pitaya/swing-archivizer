@@ -1,4 +1,4 @@
-package swingarchivizer.components;
+package swingarchivizer;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,5 @@
 package swingarchivizer;
 
-import swingarchivizer.components.UniDateInput;
-
 import javax.swing.*;
 import java.awt.*;
 

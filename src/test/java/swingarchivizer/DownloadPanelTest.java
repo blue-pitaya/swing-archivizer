@@ -1,10 +1,6 @@
 package swingarchivizer;
 
 import org.junit.jupiter.api.Test;
-import swingarchivizer.context.AppContext;
-import swingarchivizer.context.FetchItem;
-import swingarchivizer.context.FetchState;
-import swingarchivizer.dto.Item;
 
 import javax.swing.*;
 import java.awt.Component;
@@ -16,15 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DownloadPanelTest {
 
-    private final AppContext ctx = new AppContext();
     private DownloadPanel panel;
 
     @Test
     void showsFetchStateAsStatusText() throws Exception {
         createPanel();
 
-        ctx.getFetchState().setValue(FetchState.RUNNING);
-        flushEdt();
+        SwingUtilities.invokeAndWait(() -> panel.setFetchState(DownloadPanel.FetchState.RUNNING));
 
         assertEquals("Pobieranie w trakcie...", statusLabel().getText());
     }
@@ -33,7 +27,7 @@ class DownloadPanelTest {
     void showsLoadedItemsAndEnablesStart() throws Exception {
         createPanel();
 
-        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new Item()))));
+        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new HttpService.Item()))));
 
         assertEquals(1, table().getRowCount());
         assertTrue(startButton().isEnabled());
@@ -45,9 +39,8 @@ class DownloadPanelTest {
     void runningDownloadEnablesStopAndLocksDirectory() throws Exception {
         createPanel();
 
-        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new Item()))));
-        ctx.getFetchState().setValue(FetchState.RUNNING);
-        flushEdt();
+        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new HttpService.Item()))));
+        SwingUtilities.invokeAndWait(() -> panel.setFetchState(DownloadPanel.FetchState.RUNNING));
 
         assertFalse(startButton().isEnabled());
         assertTrue(stopButton().isEnabled());
@@ -58,7 +51,7 @@ class DownloadPanelTest {
     void busyDisablesTableAndButtons() throws Exception {
         createPanel();
 
-        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new Item()))));
+        SwingUtilities.invokeAndWait(() -> panel.setItems(Collections.singletonList(new FetchItem(new HttpService.Item()))));
         SwingUtilities.invokeAndWait(() -> panel.setBusy(true));
 
         assertFalse(table().isEnabled());
@@ -70,13 +63,9 @@ class DownloadPanelTest {
     private void createPanel() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
             MessageDialogHelper messageDialogHelper = new MessageDialogHelper(null);
-            FetchService fetchService = new FetchService(ctx, messageDialogHelper, new HttpService(), busy -> { });
-            panel = new DownloadPanel(ctx, messageDialogHelper, fetchService);
+            FetchService fetchService = new FetchService(messageDialogHelper, new HttpService(), busy -> { });
+            panel = new DownloadPanel(messageDialogHelper, fetchService);
         });
-    }
-
-    private static void flushEdt() throws Exception {
-        SwingUtilities.invokeAndWait(() -> { });
     }
 
     private JTable table() {

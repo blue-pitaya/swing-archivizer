@@ -1,9 +1,5 @@
 package swingarchivizer;
 
-import swingarchivizer.context.AppContext;
-import swingarchivizer.context.FetchItem;
-import swingarchivizer.context.FetchState;
-import swingarchivizer.dto.Item;
 import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,27 +12,24 @@ import java.util.stream.Collectors;
 
 public final class FetchService {
 
-    private final AppContext ctx;
     private final MessageDialogHelper messageDialogHelper;
     private final HttpService httpService;
     private final BusyAware busyAware;
 
     public FetchService(
-            AppContext ctx,
             MessageDialogHelper messageDialogHelper,
             HttpService httpService,
             BusyAware busyAware
     ) {
-        this.ctx = ctx;
         this.messageDialogHelper = messageDialogHelper;
         this.httpService = httpService;
         this.busyAware = busyAware;
     }
 
     public void fetchItems(LocalDate from, LocalDate to, Consumer<List<FetchItem>> onFetched) {
-        new SwingWorker<List<Item>, Void>() {
+        new SwingWorker<List<HttpService.Item>, Void>() {
             @Override
-            protected List<Item> doInBackground() throws IOException {
+            protected List<HttpService.Item> doInBackground() throws IOException {
                 return Arrays.asList(httpService.postItemsIds(from, to));
             }
 
@@ -47,7 +40,6 @@ public final class FetchService {
                             .map(FetchItem::new)
                             .collect(Collectors.toList());
                     onFetched.accept(items);
-                    ctx.getFetchState().setValue(FetchState.NEW);
                 } catch (InterruptedException | ExecutionException e) {
                     messageDialogHelper.report(e);
                 } finally {
@@ -57,7 +49,7 @@ public final class FetchService {
         }.execute();
     }
 
-    public void downloadItem(FetchItem item, Path downloadDir, Runnable onDone) {
+    public void downloadItem(FetchItem item, Path downloadDir, Consumer<FetchItem.Status> onDone) {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws IOException {
@@ -69,12 +61,10 @@ public final class FetchService {
             protected void done() {
                 try {
                     get();
-                    item.status.setValue(FetchItem.Status.DONE);
+                    onDone.accept(FetchItem.Status.DONE);
                 } catch (InterruptedException | ExecutionException e) {
                     messageDialogHelper.report(e);
-                    item.status.setValue(FetchItem.Status.ERROR);
-                } finally {
-                    onDone.run();
+                    onDone.accept(FetchItem.Status.ERROR);
                 }
             }
         }.execute();
