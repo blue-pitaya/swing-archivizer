@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-final class FetchItemsTableModel extends AbstractTableModel {
+public final class FetchItemsTableModel extends AbstractTableModel {
     private static final String[] COLUMNS = {"ID", "Kod", "Data", "Status"};
 
     private List<FetchItem> items = new ArrayList<>();
     private final List<Consumer<FetchItem.Status>> statusListeners = new ArrayList<>();
 
-    void setItems(List<FetchItem> items) {
+    public void setItems(List<FetchItem> items) {
         for (int row = 0; row < this.items.size(); row++) {
             this.items.get(row).status.unsubscribe(statusListeners.get(row));
         }

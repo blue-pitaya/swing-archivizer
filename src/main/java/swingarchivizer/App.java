@@ -1,9 +1,6 @@
 package swingarchivizer;
 
 import swingarchivizer.context.AppContext;
-import swingarchivizer.presenters.DownloadPresenter;
-import swingarchivizer.views.DownloadPanel;
-import swingarchivizer.workers.FetchItemsWorker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,14 +18,15 @@ public class App {
             JFrame frame = new JFrame("Archivizer v1.0");
             MessageDialogHelper messageDialogHelper = new MessageDialogHelper(frame);
             UiBlocker uiBlocker = new UiBlocker();
+            FetchService fetchService = new FetchService(ctx, messageDialogHelper, httpService, uiBlocker);
 
-            FetchItemsInfoFormPanel fetchItemsInfoFormPanel = getFetchItemsInfoFormPanel(config, ctx, messageDialogHelper, httpService, uiBlocker);
+            FetchItemsInfoFormPanel fetchItemsInfoFormPanel = getFetchItemsInfoFormPanel(config, fetchService, uiBlocker);
             uiBlocker.add(fetchItemsInfoFormPanel);
             frame.add(fetchItemsInfoFormPanel, BorderLayout.NORTH);
 
-            DownloadPanel downloadPanel = new DownloadPanel();
-            new DownloadPresenter(downloadPanel, ctx, messageDialogHelper, httpService);
-            frame.add(downloadPanel.getComponent(), BorderLayout.CENTER);
+            DownloadPanel downloadPanel = new DownloadPanel(ctx, messageDialogHelper, fetchService);
+            uiBlocker.add(downloadPanel);
+            frame.add(downloadPanel, BorderLayout.CENTER);
 
             frame.setMinimumSize(new Dimension(100, 200));
             frame.pack();
@@ -40,9 +38,7 @@ public class App {
 
     private static FetchItemsInfoFormPanel getFetchItemsInfoFormPanel(
             AppConfig appConfig,
-            AppContext ctx,
-            MessageDialogHelper messageDialogHelper,
-            HttpService httpService,
+            FetchService fetchService,
             UiBlocker uiBlocker
     ) {
         DefaultDatesProvider ddp = new DefaultDatesProvider() {
@@ -90,7 +86,7 @@ public class App {
                 }
 
                 uiBlocker.setBusy(true);
-                new FetchItemsWorker(ctx, messageDialogHelper, httpService, uiBlocker, fromDate, toDate).execute();
+                fetchService.fetchItems(fromDate, toDate);
             }
 
             @Override
