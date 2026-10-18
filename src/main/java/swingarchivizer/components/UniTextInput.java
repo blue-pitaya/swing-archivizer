@@ -89,7 +89,7 @@ public final class UniTextInput extends JPanel {
         field.setText(v);
     }
 
-    String getText() {
+    public String getText() {
         return field.getText();
     }
 }

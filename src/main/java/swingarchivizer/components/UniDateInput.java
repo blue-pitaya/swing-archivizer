@@ -1,5 +1,7 @@
 package swingarchivizer.components;
 
+import swingarchivizer.ValidationEvent;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
@@ -31,6 +33,14 @@ public final class UniDateInput extends JPanel {
         } catch (DateTimeParseException e) {
             input.setValidationMessage("Nieprawidłowa data");
             return Optional.empty();
+        }
+    }
+
+    public void handleValidationEvent(ValidationEvent event) {
+        if (event.isOk()) {
+            input.clearValidationMessage();
+        } else {
+            input.setValidationMessage(event.getMessage());
         }
     }
 
