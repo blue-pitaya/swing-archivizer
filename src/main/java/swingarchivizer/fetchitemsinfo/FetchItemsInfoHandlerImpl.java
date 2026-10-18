@@ -1,9 +1,14 @@
-package swingarchivizer;
+package swingarchivizer.fetchitemsinfo;
+
+import swingarchivizer.FetchService;
+import swingarchivizer.ItemsFetchedListener;
+import swingarchivizer.UiBlocker;
+import swingarchivizer.ValidationEvent;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
-final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
+public final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
 
     private final FetchService fetchService;
     private final UiBlocker uiBlocker;
@@ -11,7 +16,7 @@ final class FetchItemsInfoHandlerImpl implements FetchItemsInfoHandler {
 
     private FetchItemsInfoListener listener;
 
-    FetchItemsInfoHandlerImpl(
+    public FetchItemsInfoHandlerImpl(
             FetchService fetchService,
             UiBlocker uiBlocker,
             ItemsFetchedListener onItemsFetched

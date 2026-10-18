@@ -1,15 +1,20 @@
-package swingarchivizer;
+package swingarchivizer.fetchitemsinfo;
+
+import swingarchivizer.AppConfig;
+import swingarchivizer.BusyListener;
+import swingarchivizer.UniTextInput;
+import swingarchivizer.ValidationEvent;
 
 import javax.swing.*;
 import java.awt.*;
 
-final class FetchItemsInfoFormPanel extends JPanel implements BusyListener {
+public final class FetchItemsInfoPanel extends JPanel implements BusyListener {
 
     private final UniTextInput dateFormInput = new UniTextInput("Data początkowa");
     private final UniTextInput dateToInput = new UniTextInput("Data końcowa");
     private final JButton confirmButton = new JButton("Pobierz");
 
-    public FetchItemsInfoFormPanel(
+    public FetchItemsInfoPanel(
             AppConfig config,
             FetchItemsInfoHandler handler
     ) {

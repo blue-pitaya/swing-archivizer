@@ -6,9 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-final class UiBlocker {
+public final class UiBlocker {
 
-    enum Mode {
+    public enum Mode {
         FETCH,
         DOWNLOAD
     }
@@ -22,7 +22,7 @@ final class UiBlocker {
         panels.put(panel, panelModes);
     }
 
-    void setBusy(Mode mode, boolean busy) {
+    public void setBusy(Mode mode, boolean busy) {
         if (busy) {
             activeModes.add(mode);
         } else {

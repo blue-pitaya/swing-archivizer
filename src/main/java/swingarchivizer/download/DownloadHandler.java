@@ -1,8 +1,10 @@
-package swingarchivizer;
+package swingarchivizer.download;
+
+import swingarchivizer.FetchItem;
 
 import java.util.List;
 
-interface DownloadHandler {
+public interface DownloadHandler {
 
     void startDownload(String directory, List<FetchItem> items);
 

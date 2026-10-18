@@ -1,6 +1,9 @@
-package swingarchivizer;
+package swingarchivizer.download;
 
 import org.junit.jupiter.api.Test;
+import swingarchivizer.AppConfig;
+import swingarchivizer.FetchItem;
+import swingarchivizer.HttpService;
 
 import javax.swing.*;
 import java.awt.Component;

@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-final class UniDirectoryInput extends UniTextInput {
+public final class UniDirectoryInput extends UniTextInput {
     private final JButton browseButton = new JButton("Wybierz");
 
     public UniDirectoryInput(String labelText) {

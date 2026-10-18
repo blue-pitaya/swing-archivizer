@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-final class FetchService {
+public final class FetchService {
 
     private final HttpService httpService;
     private final UiBlocker uiBlocker;

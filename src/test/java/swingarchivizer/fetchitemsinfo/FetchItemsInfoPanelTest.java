@@ -1,7 +1,8 @@
-package swingarchivizer;
+package swingarchivizer.fetchitemsinfo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import swingarchivizer.AppConfig;
 
 import javax.swing.SwingUtilities;
 import java.awt.Component;
@@ -10,14 +11,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FetchItemsInfoFormPanelTest {
+class FetchItemsInfoPanelTest {
 
     @Test
     void busyDisablesAllComponents() throws Exception {
         List<Boolean> enabled = new ArrayList<>();
 
         SwingUtilities.invokeAndWait(() -> {
-            FetchItemsInfoFormPanel panel = new FetchItemsInfoFormPanel(new AppConfig(), new FakeHandler());
+            FetchItemsInfoPanel panel = new FetchItemsInfoPanel(new AppConfig(), new FakeHandler());
             panel.busyChanged(true);
             for (Component component : panel.getComponents()) {
                 enabled.add(component.isEnabled());

@@ -1,6 +1,6 @@
 package swingarchivizer;
 
-interface BusyListener {
+public interface BusyListener {
 
     void busyChanged(boolean busy);
 }

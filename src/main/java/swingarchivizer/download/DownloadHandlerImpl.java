@@ -1,4 +1,9 @@
-package swingarchivizer;
+package swingarchivizer.download;
+
+import swingarchivizer.FetchItem;
+import swingarchivizer.FetchService;
+import swingarchivizer.UiBlocker;
+import swingarchivizer.ValidationEvent;
 
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -7,14 +12,14 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
-final class DownloadHandlerImpl implements DownloadHandler {
+public final class DownloadHandlerImpl implements DownloadHandler {
 
     private final FetchService fetchService;
     private final UiBlocker uiBlocker;
 
     private DownloadListener listener;
 
-    DownloadHandlerImpl(
+    public DownloadHandlerImpl(
             FetchService fetchService,
             UiBlocker uiBlocker
     ) {
@@ -47,7 +52,7 @@ final class DownloadHandlerImpl implements DownloadHandler {
         this.listener = listener;
     }
 
-    void showItems(List<FetchItem> items) {
+    public void showItems(List<FetchItem> items) {
         listener.itemsChanged(items);
         listener.fetchStateChanged(DownloadPanel.FetchState.NEW);
     }

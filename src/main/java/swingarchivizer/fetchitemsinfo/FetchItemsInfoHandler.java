@@ -1,6 +1,6 @@
-package swingarchivizer;
+package swingarchivizer.fetchitemsinfo;
 
-interface FetchItemsInfoHandler {
+public interface FetchItemsInfoHandler {
 
     void submitForm(String from, String to);
 

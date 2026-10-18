@@ -1,10 +1,17 @@
-package swingarchivizer;
+package swingarchivizer.download;
+
+import swingarchivizer.AppConfig;
+import swingarchivizer.BusyListener;
+import swingarchivizer.FetchItem;
+import swingarchivizer.FetchItemsTable;
+import swingarchivizer.UniDirectoryInput;
+import swingarchivizer.ValidationEvent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-final class DownloadPanel extends JPanel implements BusyListener {
+public final class DownloadPanel extends JPanel implements BusyListener {
 
     public enum FetchState {
         NEW("Gotowy"),

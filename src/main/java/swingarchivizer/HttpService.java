@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 
-final class HttpService {
+public final class HttpService {
 
     public static final class Item {
         public int id;

@@ -4,22 +4,22 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 
-final class AppConfig {
+public final class AppConfig {
 
     String getTitle() {
         return "Archivizer v1.0";
     }
 
-    LocalDate getDefaultFromDate() {
+    public LocalDate getDefaultFromDate() {
         return LocalDate.of(2026, 1, 1);
     }
 
-    LocalDate getDefaultToDate() {
+    public LocalDate getDefaultToDate() {
         return LocalDate.of(2026, 1, 31);
     }
 
     //TODO: a bit misleading
-    Path getDefaultDownloadDir() {
+    public Path getDefaultDownloadDir() {
         return Paths.get(System.getProperty("user.dir"), "download");
     }
 }

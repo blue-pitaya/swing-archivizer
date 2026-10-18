@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
-class UniTextInput extends JPanel {
+public class UniTextInput extends JPanel {
     private static final int GAP = 4;
     private static final int VALIDATION_GAP = 0;
     private static final String EMPTY_VALIDATION_MESSAGE = " ";
@@ -17,7 +17,7 @@ class UniTextInput extends JPanel {
     private final JLabel validationMessage;
     private String placeholder;
 
-    UniTextInput(String labelText) {
+    public UniTextInput(String labelText) {
         super(new GridBagLayout());
 
         field = new JTextField(20) {
@@ -68,7 +68,7 @@ class UniTextInput extends JPanel {
         field.setEnabled(enabled);
     }
 
-    void setPlaceholder(String v) {
+    public void setPlaceholder(String v) {
         placeholder = v;
     }
 

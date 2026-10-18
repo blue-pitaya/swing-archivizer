@@ -1,6 +1,6 @@
 package swingarchivizer;
 
-final class FetchItem {
+public final class FetchItem {
     public enum Status {
         QUEUED("W kolejce"),
         DOWNLOADING("Pobieranie..."),

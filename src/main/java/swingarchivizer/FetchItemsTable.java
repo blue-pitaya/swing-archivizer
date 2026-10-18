@@ -7,11 +7,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-final class FetchItemsTable extends JTable {
+public final class FetchItemsTable extends JTable {
 
     private final Model tableModel = new Model();
 
-    FetchItemsTable() {
+    public FetchItemsTable() {
         setModel(tableModel);
 
         setPreferredScrollableViewportSize(new Dimension(400, 200));
@@ -25,15 +25,15 @@ final class FetchItemsTable extends JTable {
         });
     }
 
-    void setItems(List<FetchItem> items) {
+    public void setItems(List<FetchItem> items) {
         tableModel.setItems(items);
     }
 
-    List<FetchItem> getItems() {
+    public List<FetchItem> getItems() {
         return tableModel.items;
     }
 
-    void setStatus(FetchItem item, FetchItem.Status status) {
+    public void setStatus(FetchItem item, FetchItem.Status status) {
         item.status = status;
         int row = tableModel.items.indexOf(item);
         tableModel.fireTableRowsUpdated(row, row);

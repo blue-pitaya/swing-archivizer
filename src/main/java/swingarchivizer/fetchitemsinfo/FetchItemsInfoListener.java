@@ -1,4 +1,6 @@
-package swingarchivizer;
+package swingarchivizer.fetchitemsinfo;
+
+import swingarchivizer.ValidationEvent;
 
 interface FetchItemsInfoListener {
 

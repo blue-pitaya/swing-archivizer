@@ -1,5 +1,9 @@
 package swingarchivizer;
 
+import swingarchivizer.download.DownloadHandlerImpl;
+import swingarchivizer.fetchitemsinfo.FetchItemsInfoHandler;
+import swingarchivizer.fetchitemsinfo.FetchItemsInfoHandlerImpl;
+
 import javax.swing.*;
 
 class App {
